@@ -1,129 +1,174 @@
 // Fonction auto appelée
-(async function() {
-    // Récupérer l'id du kanap dans une url
-    const productId = getProductId()
-     //console.log(productId) //= vérif 1
-    // fetch notre kanap
-    const product = await getProduct(productId)
-    //console.log(product)// vérif 2 si on l'a bien récup
-    // complète les infos du kanap clické
-    productsData(product)
-})()
+(async function () {
+  // Récupérer l'id du kanap dans une url
+  const productId = getProductId();
+  //console.log(productId) //= vérif 1
+  // fetch notre kanap
+  const product = await getProduct(productId);
+  //console.log(product)// vérif 2 si on l'a bien récup
+  // complète les infos du kanap clické
+  productsData(product);
+})();
 // Fct qui permet de récupérer l'id via la console par l'objet "location" puis "location.href" puis "location.href" puis "new URL(location.href)" puis "new URL(location.href).get("id") => donne l'id.
 function getProductId() {
-    return new URL(location.href).searchParams.get('id')
+  return new URL(location.href).searchParams.get("id");
 }
 // Copie de getKanap + concaténation "productId"
 async function getProduct(productId) {
-    try {
-        const res = await fetch(`http://localhost:3000/api/products/${productId}`)
-        const products = await res.json()
-        return products
-    } catch (error) {
-        alert(error)
-    }
+  try {
+    const res = await fetch(`http://localhost:3000/api/products/${productId}`);
+    const products = await res.json();
+    return products;
+  } catch (error) {
+    alert(error);
+  }
 }
-function productsData(product) { // = tout ce qui est à l'interieur du fetch
-  const altTxt = product.altTxt
-  const colors = product.colors
-  const description = product.description
-  const imageUrl = product.imageUrl
-  const name = product.name
-  const price = product.price
-  const _id = product._id
+function productsData(product) {
+  // = tout ce qui est à l'interieur du fetch
+  const altTxt = product.altTxt;
+  const colors = product.colors;
+  const description = product.description;
+  const imageUrl = product.imageUrl;
+  const name = product.name;
+  const price = product.price;
+  const _id = product._id;
   // Plus élégant: const { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
   //
-  makePageTitle(name)
-  makeImage(imageUrl, altTxt)
-  makeTitle(name)
-  makePrice(price)
-  makeDescription(description)
-  makeColors(colors)
+  makePageTitle(name);
+  makeImage(imageUrl, altTxt);
+  makeTitle(name);
+  makePrice(price);
+  makeDescription(description);
+  makeColors(colors);
 }
 function makePageTitle(name) {
-    const pageTitle = document.querySelector('head title')
-    pageTitle.innerText = name
+  const pageTitle = document.querySelector("head title");
+  pageTitle.innerText = name;
 }
 
 function makeImage(imageUrl, altTxt) {
-  const image = document.createElement("img")
-  image.src = imageUrl
-  image.alt = altTxt
-  const parent = document.querySelector(".item__img")
-  parent.appendChild(image)
+  const image = document.createElement("img");
+  image.src = imageUrl;
+  image.alt = altTxt;
+  const parent = document.querySelector(".item__img");
+  parent.appendChild(image);
 }
 
 function makeTitle(name) {
-  const h1 = document.querySelector("#title")
-  h1.innerText = name
+  const h1 = document.querySelector("#title");
+  h1.innerText = name;
 }
 
 function makePrice(price) {
-  const span = document.querySelector("#price")
-  span.innerText = price
+  const span = document.querySelector("#price");
+  span.innerText = price;
 }
 function makeDescription(description) {
-  const p = document.querySelector("#description")
-  p.innerText = description
+  const p = document.querySelector("#description");
+  p.innerText = description;
 }
 function makeColors(colors) {
-  const select = document.querySelector("#colors")
-  
-    colors.forEach((color) => {
-      const option = document.createElement("option")
-      option.value = color
-      option.innerText = color
-      select.appendChild(option)
-    })
+  const select = document.querySelector("#colors");
+
+  colors.forEach((color) => {
+    const option = document.createElement("option");
+    option.value = color;
+    option.innerText = color;
+    select.appendChild(option);
+  });
 }
 // button
-const button = document.querySelector('#addToCart')
-button.addEventListener('click', productClick)
+const button = document.querySelector("#addToCart");
+button.addEventListener("click", productClick);
 
-function productClick() { // récup des données qui peuvent être modifiées
-  const colorsOption = document.querySelector("#colors").value
-  const numberSelect = document.querySelector("#quantity").value
-//si un des 2 est vide stop(:return), sinon saveOrder + redirectToCart
-  if (isOrderInvalid(colorsOption, numberSelect)) return
-  saveBasket(colorsOption, numberSelect)
-  redirectToCart()
+function productClick() {
+  // récup des données qui peuvent être modifiées
+  const colorsOption = document.querySelector("#colors").value;
+  const numberSelect = document.querySelector("#quantity").value;
+  //si un des 2 est vide stop(:return), sinon saveOrder + redirectToCart
+  if (isOrderInvalid(colorsOption, numberSelect)) return;
+  saveBasket(colorsOption, numberSelect);
+  /*redirectToCart();*/
 }
-console.log("arrivée sur la page produit")
-function saveBasket(colorsOption, numberSelect) { // création objet pour le localStorage
-    const productId = getProductId()
-     console.log(`repérer : `, productId) //= vérif 1
-    let key = `Basket`
-    let basket = {
-        id: productId,
-        color: colorsOption,
-        quantity: Number(numberSelect),//Number(quantity),parseFloat
+console.log("arrivée sur la page produit");
+function saveBasket(colorsOption, numberSelect) {
+  // création objet pour le localStorage
+  const productId = getProductId();
+  console.log(`repérer : `, productId); //= vérif 1
+  let key = `Basket`;
+  let basket = {
+    id: productId,
+    color: colorsOption,
+    quantity: Number(numberSelect), //Number(quantity),parseFloat
+  };
+  // s'il y a un produit dans le local storage
+  if (basket[productId]) {
+    basket[productId].push({ color: colorsOption, quantity: numberSelect });
+    localStorage.setItem("basket", JSON.stringify(basket[productId]));
+    /********************* AJOUTER UN PRODUIT **************** */
+    //} else if (basket[productId] != null) {
+    for (i = 0; i < basket[productId].length; i++) {
+      console.log("test"); // si pas null test
+      // si mm id et mm couleur
+      if (
+        basket[productId][i]._id == productId &&
+        basket[productId][i].colors == colorsOption.value
+      ) {
+        return (
+          // tjrs avec virgule pas point-virgule
+          (basket[productId][i].quantity =
+            parseInt(basket[productId][i].quantity) + parseInt(numberSelect)),
+          console.log("quantity++"),
+          //localStorage.setItem('basket', JSON.stringify(basket[productId])),
+          (basket[productId] = JSON.parse(localStorage.getItem("basket")))
+        );
+      }
     }
-     // s'il y a un produit dans le local storage  //
-    // if there's product(s) in local Storage, pusht in json format //
-    if(basket[productId]){
-        basket[productId].push({ color: colorsOption, quantity: numberSelect})
-        localStorage.setItem("basket", JSON.stringify(basket[productId]))
+    // si mm id et couleur différente ou id différent
+    for (i = 0; i < basket[productId].length; i++) {
+      console.log("pas null"); // si pas null test 2
+      if (
+        (basket[productId][i]._id == productId &&
+          basket[productId][i].colors != colorsOption.value) ||
+        basket[productId][i]._id != productId
+      ) {
+        const otherColor = Object.assign({}, basket, {
+          color: colorsOption.value,
+        });
+        console.log(otherColor);
+        return (
+          //basket[productId][i].colors == colorsOption.value,
+          (basket[productId] = []),
+          basket[productId].push(otherColor),
+          console.log("anotherColor"), // si new color
+          //console.log(basket[productId]),
+          localStorage.setItem("basket", JSON.stringify(basket[productId])),
+          (basket[productId] = JSON.parse(localStorage.getItem("basket")))
+        );
+      }
     }
-    // s'il n'y a pas un produit dans le local storage  //
-    // if there's not product in local Storage, create an array and push it //
-    else{
-        console.log('pas de produit dans le localStorage')
-        basket = {}
-        basket[productId] = []
-        console.log('tableau vide')
-        basket[productId].push({ color: colorsOption, quantity: numberSelect})
-        console.log('un produit est maintenant dans le localStorage')
-        localStorage.setItem('basket', JSON.stringify(basket[productId]))
-    }
-    localStorage.setItem('basket', JSON.stringify(basket))//sérialiser les données pour les enregistrer dans le localStorage (en chaîne de caractères)
+
+    /************************************** */
+  }
+  // s'il n'y a pas un produit dans le local storage  //
+  else {
+    console.log("pas de produit dans le localStorage");
+    basket = {};
+    basket[productId] = [];
+    console.log("tableau vide");
+    basket[productId].push({ color: colorsOption, quantity: numberSelect });
+    console.log("un produit est maintenant dans le localStorage");
+    localStorage.setItem("basket", JSON.stringify(basket[productId]));
+  }
+  localStorage.setItem("basket", JSON.stringify(basket)); //sérialiser les données pour les enregistrer dans le localStorage (en chaîne de caractères)
 }
 
 function isOrderInvalid(color, quantity) {
   if (color == null || color === "" || quantity == null || quantity == 0) {
-    alert("Please select a color and quantity")
-    return true// pour rester sur la page = stop
+    alert("Please select a color and quantity");
+    return true; // pour rester sur la page = stop
   }
 }
-function redirectToCart() {
-  window.location.href = "cart.html"
-}
+/*function redirectToCart() {
+  window.location.href = "cart.html";
+}*/
