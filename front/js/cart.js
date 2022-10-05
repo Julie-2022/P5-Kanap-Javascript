@@ -1,128 +1,143 @@
-function FillingTab() {
-  let tab = [];
-  if (localStorage.getItem("basket") != null) {
-    tab = JSON.parse(localStorage.getItem("basket"));
-  }
-  return tab;
-}
+async function displayCart() {
+  //console.log("displayCart");
 
-function displayCart() {
-  let tab = FillingTab();
-  let displayArticle = document.querySelector("#cart__items");
+  const basket = JSON.parse(localStorage.getItem("basket")) || {};
+  if (basket) {
+    // loop through the basket object to get the items from the api
+    // 1ère étape :
+    // for (const [key, value] of Object.entries(basket)) {
+    //   console.log(key, value)
+    for (const key of Object.keys(basket)) {
+      let color;
+      let quantity;
+      const results = await fetch(
+        `http://localhost:3000/api/products/${key}`
+      ).then((response) => response.json());
+      //console.log(key)
+      // loop through the basket values to get the color and quantity
+      for (const value of Object.values(basket[key])) {
+        color = value.color;
+        quantity = value.quantity;
+      }
+      // console.log(results.imageUrl, results.altTxt, results.id, results.colors, results.name, results.price)
+      console.log(basket);
+      // console.table(basket[key]);
+      /*************** */
+      // for (const color in Object.keys(basket[key])) {
+      //   console.table((basket[key][color]));
 
-  if (localStorage.getItem("basket") != null) {
-    for (let i = 0; i < tab.length; i++) {
-      let id = tab[i].id;
-      let quantity = tab[i].quantity;
-      let color = tab[i].color;
+      Object.values(basket[key]).forEach((color, quantity) => {
+        console.log(color, quantity);
+        console.log(basket[key]);
 
-      console.table("product in LS", tab);
+        let displayArticle = document.querySelector("#cart__items");
+        let article = document.createElement("article");
+        article.classList.add("cart__item");
+        article.dataset.id = results.id;
+        article.dataset.color = results.color;
+        displayArticle.appendChild(article);
 
-      let cartFetch = function () {
-        fetch(`http://localhost:3000/api/products/${id}`)
-          .then((response) => response.json())
-          .then((data) => {
-            let article = createArticle(
-              data.imageUrl,
-              data.altTxt,
-              id,
-              color,
-              data.name,
-              data.price,
-              quantity
-            );
-            displayArticle.appendChild(article);
-          });
-      };
-      cartFetch();
+        let div = document.createElement("div");
+        div.classList.add("cart__item__img");
+        article.appendChild(div);
+
+        let image = document.createElement("img");
+        image.classList.add("cart__item__img");
+        image.src = results.imageUrl;
+        image.alt = results.altTxt;
+        div.appendChild(image);
+
+        let div2 = document.createElement("div");
+        div2.classList.add("cart__item__content");
+        article.appendChild(div2);
+        let div3 = document.createElement("div");
+        div3.classList.add("cart__item__content__description");
+        div2.appendChild(div3);
+        let kanapName = document.createElement("h2");
+        kanapName.innerText = results.name;
+        div3.appendChild(kanapName);
+        let kanapColor = document.createElement("p");
+        kanapColor.innerText = color.color;
+
+        div3.appendChild(kanapColor);
+        let KanapPrice = document.createElement("p");
+        KanapPrice.innerText = results.price + " €";
+        div3.appendChild(KanapPrice);
+        let div4 = document.createElement("div");
+        div4.classList.add("cart__item__content__settings");
+        div2.appendChild(div4);
+
+        let DivQuantity = document.createElement("div");
+        DivQuantity.classList.add("cart__item__content__settings__quantity");
+        div4.appendChild(DivQuantity);
+
+        let p = document.createElement("p");
+        p.innerText = "Qté : ";
+        DivQuantity.appendChild(p);
+
+        let input = document.createElement("input");
+        input.type = "number";
+        input.classList.add("itemQuantity");
+        input.name = "itemQuantity";
+        input.min = "1";
+        input.max = "100";
+        input.value = color.quantity;
+        //input.addEventlistener("change", changePriceQty)
+
+        DivQuantity.appendChild(input);
+
+        let div6 = document.createElement("div");
+        div6.classList.add("cart__item__content__settings__delete");
+        div4.appendChild(div6);
+        let deleteP = document.createElement("p");
+        deleteP.classList.add("deleteItem");
+        deleteP.textContent = "Supprimer";
+        div6.appendChild(deleteP);
+      });
+      /************************************************* */
+      // changePriceQty ()
+      // function changePriceQty (id, quantity) {
+      //   //for (let id in basket) {
+
+      //     document.querySelector(".itemQuantity");
+      //     input.addEventListener(
+      //       "change",
+      //       function () {
+      //         //e.preventDefault();
+      //         quantity = this.value;
+      //         alert(quantity);
+      //         console.log(this.value)
+
+      //       },
+      //       false
+      //       );
+      //       console.log("itemToChange");
+      //       // }
+      // }
+      // changePriceQty();
+      /******************* TotalQty ******************** */
+      let totalQuantity = document.querySelector("#totalQuantity");
+      console.log(basket);
+      console.log(Object.entries(basket).length);
+      console.log(Object.values(basket[key]).length);
+      totalQty = 0;
+      for (let id in basket) {
+        for (let color in basket[id]) {
+          totalQty += parseInt(basket[id][color].quantity);
+        }
+      }
+      totalQuantity.innerText = totalQty;
+      /************** TotalPrice ************** */
+      let totalPrice = document.querySelector("#totalPrice");
+      totalP = 0;
+      for (let id in basket) {
+        for (let color in basket[id]) {
+          totalP += parseInt(basket[id][color].quantity) * results.price;
+          totalPrice.innerText = totalP;
+        }
+      }
+      /********************************************** */
     }
   }
 }
 displayCart();
-//(src, alt, id, color, name, price, quantity)
-function createArticle(src, alt, id, color, name, price, quantity) {
-  //let displayArticle = document.querySelector("#cart__items");
-  let article = document.createElement("article");
-  article.classList.add("cart__item");
-  article.dataset.id = id;
-  article.dataset.color = color;
-  //displayArticle.appendChild(article);
-
-  let div = document.createElement("div");
-  div.classList.add("cart__item__img");
-  article.appendChild(div);
-
-  let image = createImage(src, alt);
-  //let image = document.createElement("img");
-  image.classList.add("cart__item__img");
-  // image.src = data.imageUrl;
-  // image.alt = data.altTxt;
-  div.appendChild(image);
-
-  let div2 = document.createElement("div");
-  div2.classList.add("cart__item__content");
-  article.appendChild(div2);
-  let div3 = document.createElement("div");
-  div3.classList.add("cart__item__content__description");
-  div2.appendChild(div3);
-
-  let kanapName = createName(name);
-  //let kanapName = document.createElement("h2");
-  //kanapName.innerText = data.name;
-  div3.appendChild(kanapName);
-  let kanapColor = document.createElement("p");
-  kanapColor.innerText = color;
-  div3.appendChild(kanapColor);
-
-  let KanapPrice = createKanapPrice(price + " €");
-  //let KanapPrice = document.createElement("p");
-  //KanapPrice.innerText = data.price;
-  div3.appendChild(KanapPrice);
-  let div4 = document.createElement("div");
-  div4.classList.add("cart__item__content__settings");
-  div2.appendChild(div4);
-
-  let qty = document.createElement("div");
-  qty.classList.add("cart__item__content__settings__quantity");
-  div4.appendChild(qty);
-
-  let p = document.createElement("p");
-  p.innerText = "Qté : ";
-  qty.appendChild(p);
-
-  let input = document.createElement("input");
-  input.type = "number";
-  input.classList.add("itemQuantity");
-  input.name = "itemQuantity";
-  input.min = "1";
-  input.max = "100";
-  input.value = quantity;
-  qty.appendChild(input);
-
-  let div6 = document.createElement("div");
-  div6.classList.add("cart__item__content__settings__delete");
-  div4.appendChild(div6);
-  let deleteP = document.createElement("p");
-  deleteP.classList.add("deleteItem");
-  deleteP.textContent = "Supprimer";
-  div6.appendChild(deleteP);
-}
-
-createArticle();
-
-function createImage(src, alt) {
-  const image = document.createElement("img");
-  image.src = src;
-  image.alt = alt;
-  return image;
-}
-function createName(name) {
-  const kanapName = document.createElement("h2");
-  kanapName.innerText = name;
-  return kanapName;
-}
-function createKanapPrice(price) {
-  const KanapPrice = document.createElement("p");
-  KanapPrice.innerText = price;
-  return KanapPrice;
-}

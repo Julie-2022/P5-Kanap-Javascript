@@ -34,6 +34,7 @@ function productsData(product) {
   const _id = product._id;
   // Plus élégant: const { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
   //
+ 
   makePageTitle(name);
   makeImage(imageUrl, altTxt);
   makeTitle(name);
@@ -88,87 +89,44 @@ function productClick() {
   //si un des 2 est vide stop(:return), sinon saveOrder + redirectToCart
   if (isOrderInvalid(colorsOption, numberSelect)) return;
   saveBasket(colorsOption, numberSelect);
-  /*redirectToCart();*/
+  redirectToCart();
 }
-console.log("arrivée sur la page produit");
-function saveBasket(colorsOption, numberSelect) {
-  // création objet pour le localStorage
-  const productId = getProductId();
-  console.log(`repérer : `, productId); //= vérif 1
-  let key = `Basket`;
-  let basket = {
-    id: productId,
-    color: colorsOption,
-    quantity: Number(numberSelect), //Number(quantity),parseFloat
-  };
-  // s'il y a un produit dans le local storage
-  if (basket[productId]) {
-    basket[productId].push({ color: colorsOption, quantity: numberSelect });
-    localStorage.setItem("basket", JSON.stringify(basket[productId]));
-    /********************* AJOUTER UN PRODUIT **************** */
-    //} else if (basket[productId] != null) {
-    for (i = 0; i < basket[productId].length; i++) {
-      console.log("test"); // si pas null test
-      // si mm id et mm couleur
-      if (
-        basket[productId][i]._id == productId &&
-        basket[productId][i].colors == colorsOption.value
-      ) {
-        return (
-          // tjrs avec virgule pas point-virgule
-          (basket[productId][i].quantity =
-            parseInt(basket[productId][i].quantity) + parseInt(numberSelect)),
-          console.log("quantity++"),
-          //localStorage.setItem('basket', JSON.stringify(basket[productId])),
-          (basket[productId] = JSON.parse(localStorage.getItem("basket")))
-        );
-      }
-    }
-    // si mm id et couleur différente ou id différent
-    for (i = 0; i < basket[productId].length; i++) {
-      console.log("pas null"); // si pas null test 2
-      if (
-        (basket[productId][i]._id == productId &&
-          basket[productId][i].colors != colorsOption.value) ||
-        basket[productId][i]._id != productId
-      ) {
-        const otherColor = Object.assign({}, basket, {
-          color: colorsOption.value,
-        });
-        console.log(otherColor);
-        return (
-          //basket[productId][i].colors == colorsOption.value,
-          (basket[productId] = []),
-          basket[productId].push(otherColor),
-          console.log("anotherColor"), // si new color
-          //console.log(basket[productId]),
-          localStorage.setItem("basket", JSON.stringify(basket[productId])),
-          (basket[productId] = JSON.parse(localStorage.getItem("basket")))
-        );
-      }
-    }
 
-    /************************************** */
+console.log("arrivée sur la page produit");
+/******************************** Gestion du LocalStorage **************************************/
+function saveBasket(colorsOption, numberSelect) {
+  const productId = getProductId();
+  let basket = JSON.parse(localStorage.getItem("basket")) || {};
+  const colorIndex = basket[productId]?.findIndex(
+    (item) => item.color === colorsOption
+  );
+  console.log(colorIndex !== -1);  // return true ou false si la couleur est stockée ou pas
+  if (basket[productId]) {
+    if (colorIndex !== -1) { //si la couleur est présente
+      // === colorOption // != -1 : (-1) : couleur non stockée
+      basket[productId][colorIndex].quantity =
+        parseInt(basket[productId][colorIndex].quantity) +
+        parseInt(numberSelect);
+    } else {
+      basket[productId].push({ color: colorsOption, quantity: numberSelect });
+    }
   }
-  // s'il n'y a pas un produit dans le local storage  //
-  else {
-    console.log("pas de produit dans le localStorage");
-    basket = {};
+  if (basket[productId] == undefined) {
     basket[productId] = [];
-    console.log("tableau vide");
     basket[productId].push({ color: colorsOption, quantity: numberSelect });
-    console.log("un produit est maintenant dans le localStorage");
-    localStorage.setItem("basket", JSON.stringify(basket[productId]));
   }
-  localStorage.setItem("basket", JSON.stringify(basket)); //sérialiser les données pour les enregistrer dans le localStorage (en chaîne de caractères)
+  localStorage.setItem("basket", JSON.stringify(basket));
 }
+// Rappel :
+// const colorIndex = basket[productId]?.findIndex((item) => item.color === colorsOption);
+// if (colorIndex != -1) {...}
 
 function isOrderInvalid(color, quantity) {
-  if (color == null || color === "" || quantity == null || quantity == 0) {
+  if (color == null || color === "" || quantity == null || quantity <= 0) {
     alert("Please select a color and quantity");
     return true; // pour rester sur la page = stop
   }
 }
-/*function redirectToCart() {
+function redirectToCart() {
   window.location.href = "cart.html";
-}*/
+}

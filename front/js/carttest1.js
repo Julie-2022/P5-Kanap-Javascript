@@ -7,7 +7,7 @@ basketFull = [];
 
 function getProducts() {
   //Récupération des données de base via l'api
-  fetch(`http://localhost:3000/api/products`)
+  fetch(`http://localhost:3000/api/products/`)
     .then(function (dataApi) {
       if (dataApi.ok) {
         return dataApi.json();
