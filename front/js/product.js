@@ -93,7 +93,7 @@ function productClick() {
 }
 
 console.log("arrivée sur la page produit");
-/******************************** Gestion du LocalStorage **************************************/
+/******************************** Gestion du LocalStorage **********************************/
 function saveBasket(colorsOption, numberSelect) {
   const productId = getProductId();
   let basket = JSON.parse(localStorage.getItem("basket")) || {};

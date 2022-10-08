@@ -119,7 +119,7 @@ function saveBasket(colorsOption, numberSelect) { // création objet pour le loc
 }
 
 function isOrderInvalid(color, quantity) {
-  if (color == null || color === "" || quantity == null || quantity == 0) {
+  if (color == null || color === "" || quantity == null || quantity <= 0) {
     alert("Please select a color and quantity")
     return true// pour rester sur la page = stop
   }

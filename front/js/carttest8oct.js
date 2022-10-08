@@ -93,14 +93,14 @@ async function displayCart() {
         div6.appendChild(deleteP);
         /****************** Change Qty *************** */
         input.addEventListener("change", (event) => {
-          console.log(event);
+         // console.log(event);
           let currentQuantity = color.quantity;
-          console.log(currentQuantity);
+         // console.log(currentQuantity);
           const newValue = Number(input.value);
           const updateQuantity = parseInt((currentQuantity = newValue));
-          console.log(updateQuantity);
+         // console.log(updateQuantity);
           color.quantity = updateQuantity;
-          console.table(basket);
+         // console.table(basket);
           localStorage.setItem("basket", JSON.stringify(basket));
           alert("La quantité de votre panier à été modifée");
           totalQuantity(updateQuantity);
@@ -236,83 +236,75 @@ async function displayCart() {
             let deleteBtn = document.querySelectorAll(".deleteItem");
             // //on loop a travers tt les btn delete
             for (let i = 0; i < deleteBtn.length; i++) {
-              //   //event listener click
-              //deleteBtn[i].onclick = (event) => { "on" = addEventListener
-              deleteBtn[i].addEventListener(
-                "click",
-                (event) => {
-                  event.preventDefault();
-                  //     //on recupere l'id et la couleur
-
-                  /**/ let basket = JSON.parse(localStorage.getItem("basket"));
-
-                  let deleteId = key;
-                  let deleteColor = color;
-                  let selectIdDelete = results.id;
-                  console.log(deleteId);
-                  console.log(deleteColor);
-
-                  const targetIndex = basket[key];
-                  console.log("targetIndex", targetIndex);
-                  console.log(targetIndex !== -1); // return true ou false si la couleur est stockée ou pas
-                  let articleToDelete = document.querySelector(
-                    `article[data-id="${deleteId}"][data-color="${deleteColor}"]`
-                    );
-                    articleToDelete = event.target.closest("article");
-                    //articleToDelete.remove()
-                    console.log("avant remove article", basket);
-                    articleToDelete.remove("article");
-                    console.log("après remove article", basket);
-                    console.log(articleToDelete, basket, "element à suppr");
-                    console.log("key", key, deleteId);
+                //   //event listener click
+                //deleteBtn[i].onclick = (event) => { "on" = addEventListener
+                deleteBtn[i].addEventListener(
+                    "click",
+                    (event) => {
+                        event.preventDefault();
+                        
+                        /**/ let basket = JSON.parse(localStorage.getItem("basket"));
+                        
+                        //     //on recupere l'id et la couleur
+                        //   let deleteId = key;
+                        //   let deleteColor = color;
+                        //   let selectIdDelete = results.id;
+                        //   console.log(deleteId);
+                        //   console.log(deleteColor);
+                        
+                        //   const targetIndex = basket[key];
+                        //   console.log("targetIndex", targetIndex);
+                        //   console.log(targetIndex !== -1); // return true ou false si la couleur est stockée ou pas
+                        //   let articleToDelete = document.querySelector(
+                            //     `article[data-id="${deleteId}"][data-color="${deleteColor}"]`
+                            //     );
+                            //     articleToDelete = event.target.closest("article");
+                            //     //articleToDelete.remove()
+                            
+                            //      console.log("avant remove article", basket);
+                            //      articleToDelete.remove("article");
+                            //     // console.log("après remove article", basket);
+                            //     console.log(articleToDelete, basket, "element à suppr");
+                            //     console.log("key", key, deleteId);
+                              for (let id in basket) {
+                            for (let color in basket[id]) {
+                                
+                                    let deleteId = basket[i].id;
+                                    let deleteColor = basket[i].color;
+                                    
                     /************** */
                     //On met à jour le LS du navigateur
 
                    /*----- Test renvoi 1 [] => */
-                   console.log("avant splice", basket);
-                      basket[key].splice(targetIndex, 1);
-                      console.log("après splice", basket);
+                //    console.log("avant splice", basket);
+                //       basket[key].splice(targetIndex, 1);
+                //       console.log("après splice", basket);
                       /*------*/
 
-                   //   basket[key].splice(Object.keys(targetIndex), 1);//[targetIndex]
-                   // localStorage.removeItem(deleteId)
-                   //localStorage = basket[key].filter( el => el.deleteId !== selectIdDelete)
-                  
+basket = basket.filter(
+        (element) => element.id !== deleteId || element.color !== deleteColor);
+      localStorage.setItem("basket", JSON.stringify(basket));
+
+      //location.reload();
+      alert("Votre article a bien été supprimé.")
+
+
 
                  /***à mettre à la fin */ // localStorage.setItem("basket", JSON.stringify(basket));
-                   
-
                  console.log(basket)
-                 
-                 //               //localStorage.removeItem(deleteId)
-                 //               //  localStorage
-                 
-                 // let Allbasket = []
-                  
-                //  Allbasket = basket[key].filter((el) => {
-                     // if (deleteId != results.id || deleteColor != color) {
-   //reste = []
-                 //localStorage = basket[key].filter( el => el.deleteId !== selectIdDelete)
-                          //localStorage.setItem("basket", JSON.stringify(Allbasket))
-               // localStorage.push(reste)
-              
-                   //   console.log(basket);
-                      localStorage.setItem("basket", JSON.stringify(basket));                  
-                    //  const keyTodelete = basket[deleteId]
-                    //  localStorage.removeItem(keyTodelete)
-                     console.log(localStorage)
+      
+                  localStorage.setItem("basket", JSON.stringify(basket))
+                
+                      
+            
                   //basket[key] = [];
                   // basket[key].push({ color: delete.color, quantity: quantity });
-
-                  //localStorage.setItem("basket", JSON.stringify(basket));
-
-                  // localStorage.setItem("basket", JSON.stringify(basket));
                   
-
+                }}  /****for et for */
                   //window.location.reload();
                 },
                 false
-              );
+                );
             }
           }
         } else {
