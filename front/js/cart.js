@@ -22,10 +22,6 @@ async function displayCart() {
       // console.log(results.imageUrl, results.altTxt, results.id, results.colors, results.name, results.price)
       //console.log(basket);
       // console.table(basket[key]);
-      /*************** */
-      // for (const color in Object.keys(basket[key])) {
-      //   console.table((basket[key][color]));
-
       Object.values(basket[key]).forEach((color) => {
         //console.log(color, quantity);
         console.log(basket[key]);
@@ -110,120 +106,6 @@ async function displayCart() {
       });
 
       /********************** Suppr *************************** */
-      //       function deleteArticle() {
-      //         let deleteItem = document.querySelectorAll(".deleteItem");
-      //         deleteItem.forEach((deleteItem) => {
-      //           deleteItem.addEventListener("click", (e) => {
-      //             e.preventDefault();
-      //             let thisArticle = deleteItem.closest("article")
-      //             console.log(thisArticle)
-      //           });
-      //           })
-      //         }
-
-      // deleteArticle()
-      /********************** Supprimer ************************* */
-      //       function deleteArticle() {
-      //         let basket = JSON.parse(localStorage.getItem("basket"));
-      // console.log(basket);
-      //         let deleteItem = document.querySelectorAll(".deleteItem");
-
-      //         for (let k = 0; k < deleteItem.length; k++) {
-      //           deleteItem[k].addEventListener("click", (event) => {
-      //             // console.log(event)
-      //             // console.log(deleteItem)
-      //             event.preventDefault();
-      //             Object.values(basket[key]).forEach((id, color) => {
-      //               console.log(basket[key]);
-      //               //Je selectionne l'élément à modifier selon son Id et sa couleur
-      //               let deleteId = key;
-      //               let deleteColor = basket[key][color].color;
-
-      // console.log("id :", key, "index de la couleur :", color);
-      // console.log(basket[key][color]);
-      // console.log("couleur sélectionnée à suppr :", deleteColor);
-
-      //               thisBasket = basket[key].filter(
-      //                 (element) =>
-      //                   element.id !== deleteId || element.color !== deleteColor
-      //               );
-      //               basket[key].splice(thisBasket, 1);
-      //               //thisBasket.removeItem()
-      // console.log("basket - supression", basket[key]);
-
-      //               localStorage.setItem("basket", JSON.stringify(basket));
-
-      //               //location.reload();
-      //               alert("Votre article a bien été supprimé.");
-      //             });
-      //           }); //fin addEventListener
-      //           totalQuantity();
-      //           totalProductsPrice();
-      //         }
-      //       }
-      //       deleteArticle();
-
-      /***************************************** */
-      // function deleteArticle() {
-      //   console.log("je suis la fonction delete");
-      //   const basket = JSON.parse(localStorage.getItem("basket"));
-      //   let deletePs = document.querySelectorAll(".deleteItem");
-      //   console.log(deletePs);
-      //   //for (let i = 0; i < deleteBtn.length; i++) {
-      //   //   let thisProduct = {};
-      //   //let totalAddPRemove = deletePs.length;
-      //   console.log("nombre de btn Suppr :", deletePs.length);
-      //   deletePs.forEach((deleteP) => {
-      //     console.log(deleteP);
-      //     let deleteId = key;
-      //     let deleteColor = color;
-      //     console.log(deleteId);
-      //     console.log(deleteColor);
-      //     for (let i = 0; i < deletePs.length; i++) {
-      //       deletePs[i].addEventListener("click", (event) => {
-      //         event.preventDefault();
-      //         console.log(event);
-
-      //         let keySelectToDelete = basket[i].id;
-      //         console.log("keySelectToDelete", keySelectToDelete);
-      //         localStorage = localStorage.filter(
-      //           (el) => el.deleteId !== keySelectToDelete
-      //         );
-      //         if (
-      //           deletePs.dataset.id != deleteId ||
-      //           deletePs.dataset.color != deleteColor
-      //         ) {
-      //           return true;
-      //         }
-
-      //         console.log(thisProduct);
-
-      //         localStorage.setItem("basket", JSON.stringify(thisProduct));
-      //         totalProductsQuantity();
-      //         totalPrice();
-      //         console.log("Suppr le produit en question");
-      //         location.href = "cart.html";
-      //       });
-      //     }
-      //   });
-      // }
-      // deleteArticle();
-
-      /**/ //on recupere le btn delete
-      // let deleteBtn = document.querySelectorAll(".deleteItem");
-      // console.log(deleteBtn)
-      // //on loop a travers tt les btn delete
-      // for (let i = 0; i < deleteBtn.length; i++) {
-      //   //event listener click
-      //   deleteBtn[i].addEventListener("click", (event) => {
-      //     event.preventDefault();
-      //     //     //on recupere l'id et la couleur
-      //     let deleteId = key;
-      //     let deleteColor = color;
-      //     console.log(deleteId);
-      //     console.log(deleteColor);
-      //   });
-      // }
       function deleteProduct() {
         if (basket) {
           // for (const key of Object.keys(basket)) {
@@ -257,58 +139,23 @@ async function displayCart() {
                   console.log(targetIndex !== -1); // return true ou false si la couleur est stockée ou pas
                   let articleToDelete = document.querySelector(
                     `article[data-id="${deleteId}"][data-color="${deleteColor}"]`
-                    );
-                    articleToDelete = event.target.closest("article");
-                    //articleToDelete.remove()
-                    console.log("avant remove article", basket);
-                    articleToDelete.remove("article");
-                    console.log("après remove article", basket);
-                    console.log(articleToDelete, basket, "element à suppr");
-                    console.log("key", key, deleteId);
-                    /************** */
-                    //On met à jour le LS du navigateur
+                  );
+                  articleToDelete = event.target.closest("article");
+                  //articleToDelete.remove()
+                  console.log("avant remove article", basket);
+                  articleToDelete.remove("article");
+                  console.log("après remove article", basket);
+                  console.log(articleToDelete, basket, "element à suppr");
+                  console.log("key", key, deleteId);
+                  /************** */
+                  //On met à jour le LS du navigateur
 
-                   /*----- Test renvoi 1 [] => */
-                   console.log("avant splice", basket);
-                      basket[key].splice(targetIndex, 1);
-                      console.log("après splice", basket);
-                      /*------*/
-
-                   //   basket[key].splice(Object.keys(targetIndex), 1);//[targetIndex]
-                   // localStorage.removeItem(deleteId)
-                   //localStorage = basket[key].filter( el => el.deleteId !== selectIdDelete)
-                  
-
-                 /***à mettre à la fin */ // localStorage.setItem("basket", JSON.stringify(basket));
-                   
-
-                 console.log(basket)
-                 
-                 //               //localStorage.removeItem(deleteId)
-                 //               //  localStorage
-                 
-                 // let Allbasket = []
-                  
-                //  Allbasket = basket[key].filter((el) => {
-                     // if (deleteId != results.id || deleteColor != color) {
-   //reste = []
-                 //localStorage = basket[key].filter( el => el.deleteId !== selectIdDelete)
-                          //localStorage.setItem("basket", JSON.stringify(Allbasket))
-               // localStorage.push(reste)
-              
-                   //   console.log(basket);
-                      localStorage.setItem("basket", JSON.stringify(basket));                  
-                    //  const keyTodelete = basket[deleteId]
-                    //  localStorage.removeItem(keyTodelete)
-                     console.log(localStorage)
-                  //basket[key] = [];
-                  // basket[key].push({ color: delete.color, quantity: quantity });
-
-                  //localStorage.setItem("basket", JSON.stringify(basket));
-
-                  // localStorage.setItem("basket", JSON.stringify(basket));
-                  
-
+                  /*----- Test renvoi 1 [] => */
+                  console.log("avant splice", basket);
+                  basket[key].splice(targetIndex, 1);
+                  console.log("après splice", basket);
+                  /*------*/
+                  localStorage.setItem("basket", JSON.stringify(basket));
                   //window.location.reload();
                 },
                 false
@@ -320,7 +167,6 @@ async function displayCart() {
         }
       }
       deleteProduct();
-
       /******************* TotalQty ******************** */
       function totalQuantity() {
         let totalQuantity = document.querySelector("#totalQuantity");
@@ -336,7 +182,7 @@ async function displayCart() {
         totalQuantity.innerText = totalQty;
       }
       totalQuantity();
-      /********************* */
+      /*****************Total Price 1er essai ************** */
       //    let totalPrice = document.querySelector("#totalPrice");
       // totalP = 0;
       // for (let id in basket) {
@@ -345,7 +191,7 @@ async function displayCart() {
       //   }
       // }
       // totalPrice.innerText = totalP;
-      /************** TotalPrice ************** */
+      /************** TotalPrice ********************** */
       function totalProductsPrice() {
         let totalPrice = 0; //document.getElementById("totalPrice") &&
         console.log(totalPrice);
@@ -369,127 +215,6 @@ async function displayCart() {
       }
       totalProductsPrice();
       /********************************************* */
-
-      // //Alerte produit supprimé
-      // alerte("Ce produit va être supprimé du panier.");
-
-      //Evènements de suppression sur les boutons supprimer avec closest
-      // function eventDeleteProduct() {
-      //   deleteP = document.querySelectorAll(".deleteItem");
-      //   //console.log("deleteP", deleteP);
-      //   deleteP.forEach((event) => {
-      //     event.addEventListener("click", (event) => {
-      //       deleteProduct(event);
-      //     });
-      //   });
-      // }
-      // eventDeleteProduct();
-      // // Fonction de suppression
-      // function deleteProduct() {
-      //   for (let id in basket) {
-      //     for (let color in basket[id]) {
-
-      //       const targetIndex = Object.entries(basket[key])?.findIndex((p) => p.color === color);
-      //       console.log("Index à suppr", targetIndex)
-      //       console.log(targetIndex !== -1);  // return true ou false si la couleur est stockée ou pas
-      //const itemToDelete = basket.findIndex(
-      // (product) => product.id === id && product.color === color
-
-      ///basket[id].splice(targetIndex, 1)
-
-      //let articleToDelete = event.target.closest("article");
-      //   //articleToDelete = document.querySelector(
-      //   //  `article[data-id="${id}"][data-color="${color}"]`
-      //    // )
-
-      //     console.log(articleToDelete, "element à suppr")
-
-      //basket.filter((p) => p.id != basket[id]); //product.id si == supprime tout les produits sauf le dernier passé ici
-      //     }
-      //   }
-      //   totalQuantity();
-      //   totalPrice();
-      // }
-
-      //       function deleteProduct() {
-      //         for (const [key, value] of Object.entries(basket)) {
-      //              console.log(key, value);
-      //              console.log(basket);
-      //              //on recupere le btn delete
-      //             let deleteBtn = document.querySelectorAll(".deleteItem");
-      //             // //on loop a travers tt les btn delete
-      //             for (let i = 0; i < deleteBtn.length; i++) {
-      //               //   //event listener click
-
-      //               deleteBtn[i].addEventListener("click", (event) => {
-      //                 event.preventDefault();
-      //                 //     //on recupere l'id et la couleur
-      //                 let deleteId = key;
-      //                 let deleteColor = color;
-      //                 console.log(deleteId);
-      //                 console.log(deleteColor);
-
-      // const deleteItem = Object.values(basket).findIndex(
-      //   (product) => product.id === deleteId && product.color === deleteColor
-      // )
-
-      // console.log(deleteItem)
-      // basket[key].splice(deleteItem, 1)
-      // console.log(basket)
-
-      //                 // const articleToDelete = document.querySelector(
-      //                 //   `article[data-id="${deleteId}"][data-color="${deleteColor}"]`)
-      //                 //   console.log("element à suppr", articleToDelete, )
-      // //On met à jour le LS du navigateur
-      //         localStorage.setItem("basket", JSON.stringify(basket));
-      //         console.log(localStorage)
-      //         // // On demande à enlever l'article du DOM
-      //         //articleToDelete.parentNode.removeChild("article");
-
-      //             //deleteBtn.splice(articleToDelete, 1)
-      //         //articleToDelete.remove()
-      //       totalQuantity ()
-      //       totalPrice()
-
-      //       })
-      //     }
-      //   }
-      // }
-
-      // deleteProduct()
-      // function deleteProduct(event) {
-      //   event.preventDefault();
-
-      // // for (let id in basket) {
-      // //         for (let color in basket[id]) {
-
-      // Object.values(basket[key]).forEach((id, color) => {
-
-      //   let articleToDelete = event.target.closest("article");
-      //   //articleToDelete = document.querySelector(
-      //   //  `article[data-id="${id}"][data-color="${color}"]`
-      //    // )
-
-      //     console.log(articleToDelete, "element à suppr")
-      //      for (let color of basket[key]) {
-      //   // On supprime
-      //   basket[key].splice(articleToDelete, 1);
-      //  //basket[key].splice(articleToDelete, 1);
-      // articleToDelete.remove()
-      //   // thisProduct.splice(basket[id][color])
-      //   // On vérifie que le LS est correct après supression
-      //   console.log("basket - supression", basket[key]);
-      //   // // On met à jour le LS du navigateur
-      //    localStorage.setItem("product", JSON.stringify(basket));
-      //   // // On demande à enlever l'article du DOM
-      //    articleToDelete.parentNode.removeChild("article");
-      //    // On supprime le produit du panierComplet
-      //   // //panierComplet.splice(resultIndex, 1);
-      //   // // On recalcule
-      //   totalQuantity ()
-      //   totalPrice()
-      //      }
-      // })}
     }
   }
 }
