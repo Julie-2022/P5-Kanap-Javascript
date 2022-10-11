@@ -1,214 +1,192 @@
-/**************************** Modif Qty ***********************/
-      // function changePriceQty (id, item, newValue) {
-      //   for (let id in basket) {
-      //   //for (let quantity in basket[id]) {
-      //     let changeItem = basket[id].find((item) => item.id === id)
-      //     console.log(id)
-      //     //changeItem.quantity = Number(newValue)
-      //     quantity = changeItem.quantity
-      //     //changeItem += parseInt(basket[id][color].quantity);
-      //   }
-      // //}
-      // }
-      // changePriceQty()
-  
-
-      function changePriceQty () {
-       input.addEventListener('change', (event) => {
-                 console.log(event);
-                const inputValue = input.value;
-                console.log(inputValue);
-                const currentQuantity = quantity;
-                console.log(currentQuantity);
-                const updateQuantity = +currentQuantity + +inputValue;
-                console.log(updateQuantity);
-                quantity = updateQuantity
-                console.table(basket);
-            localStorage.setItem('basket', JSON.stringify(basket));
-            alert("La quantité de votre panier à été modifée");
-        })
-       }
-       changePriceQty ()
-      // function changePriceQty (id, quantity) {
-      //   //for (let id in basket) {
-       
-      //     document.querySelector(".itemQuantity");
-      //     input.addEventListener(
-      //       "change",
-      //       function () {
-      //         //e.preventDefault();
-      //         quantity = this.value;
-      //         alert(quantity);
-      //         console.log(this.value)
-
-      //       },
-      //       false
-      //       );
-      //       console.log("itemToChange");
-      //       // }
-          
-    // }
-    //   changePriceQty();
-      /************** TotalPrice ************** */
-      let totalPrice = document.querySelector("#totalPrice");
-      totalP = 0;
-      for (const key of Object.keys(basket)) {
-        totalP += parseInt(quantity) * results.price;
-        //console.log(totalP)
-        totalPrice.innerText = totalP;
-      }
-      /********************** Ne marche Pas !!!! *************/
-      // let totalPrice = document.querySelector("#totalPrice")
-      // const totalP = basket[key].reduce((totalP, results) => totalP + results.price * quantity, 0)
-      // totalPrice.innerText = parseInt(totalP)
-      // console.log(totalP)
-      /******************* TotalQty ******************** */
-      let totalQuantity = document.querySelector("#totalQuantity");
-      console.log(basket);
-      console.log(Object.entries(basket).length);
-      console.log(Object.values(basket[key]).length);
-      totalQty = 0;
-      for (let id in basket) {
-        for (let color in basket[id]) {
-          totalQty += parseInt(basket[id][color].quantity);
+// Création d'une var. qui appel la methode pour creer les éléments de la propriété de l'id correspondant à "cart__items"
+let elementQuantity = document.getElementById("cart__items");
+// Variable pour stocker l'ensemble des infos du panier
+let panierComplet = [];
+// Cette fonction fait GetLocalStorage et retourne les données
+function getCart() {
+  // Initialisation du local storage
+  let LocalStorage = JSON.parse(localStorage.getItem("product")) || [];
+  console.table(LocalStorage);
+  if (
+    LocalStorage === null ||
+    LocalStorage === 0 ||
+    LocalStorage === [] ||
+    LocalStorage.length === 0
+  ) {
+    let element = document.createElement("div");
+    element.innerHTML = "Votre panier est vide";
+    elementQuantity.appendChild(element);
+    console.log("Panier vide");
+    return LocalStorage;
+  } else LocalStorage !== null || LocalStorage !== 0;
+  {
+    console.log("Des produits sont dans le panier");
+    return LocalStorage;
+  }
+}
+let productLocalStorage = getCart();
+// Récupération des infos à afficher via l'api
+fetch(`http://localhost:3000/api/products/`)
+  .then(function (res) {
+    if (res.ok) {
+      return res.json();
+    }
+  })
+  .then(function (produitsAPI) {
+    console.log("produits du LS", productLocalStorage);
+    // Tableau vide qui contiendra les données du LS (qty, color) et les données de l'api (id, name, price, color, imageUrl)
+    // Pour chaque produit existant dans l'API
+    produitsAPI.map((productAPI) => {
+      // Et pour chaque produit existant dans le LS
+      productLocalStorage.map((itemLS) => {
+        // on regarde si l'ID correspond entre les deux
+        if (productAPI._id === itemLS.id) {
+          // Si oui, le produit est trouvé et ajouté dans le panierComplet (ou on pourra trouver toutes les infos nécéssaire à l'utilisateur)
+          panierComplet.push({
+            id: productAPI._id,
+            name: productAPI.name,
+            price: productAPI.price,
+            color: itemLS.color,
+            quantity: itemLS.quantity,
+            imageUrl: productAPI.imageUrl,
+          });
         }
-      }
-      totalQuantity.innerText = totalQty;
-    
+      });
+    });
+    // le panierComplet est rempli
+    console.log("panierComplet", panierComplet);
+    // Créer les bloc HTML
+    createProducts(panierComplet);
+    // Ajoute les events de delete et de changement de quantité
+    calculQuantite();
+    calculTotalPrice();
+    eventDeleteProduct();
+    eventupdateQuantity();
+  });
+// Fonction de creation des éléments
+function createProducts(productList) {
+  // Si le panier est vide
+  for (let product of productList) {
+    //creation de l'article
+    elementQuantity.innerHTML += `<article class="cart__item" data-id="${product.id}" data-color="${product.color}">
+                    <div class="cart__item__img">
+                        <img src="${product.imageUrl}" alt="Photographie d'un canapé ${product.name}">
+                    </div>
+                    <div class="cart__item__content">
+                        <div class="cart__item__content__titlePrice">
+                            <h2>${product.name}</h2>
+                            <p>${product.price} €</p>
+                            <p>${product.color}</p>
+                        </div>
+                        <div class="cart__item__content__settings">
+                            <div class="cart__item__content__settings__quantity">
+                                <p>Qté : </p>
+                                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
+                            </div>
+                            <div class="cart__item__content__settings__delete">
+                                <p class="deleteItem" id="[item_Id]">Supprimer</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>`;
+  }
+}
+//Evènements de suppression sur les boutons supprimer avec closest
+function eventDeleteProduct() {
+  let selectsSupp = document.querySelectorAll(".deleteItem");
+  //console.log("selectsSupp", selectsSupp);
+  selectsSupp.forEach((select) => {
+    select.addEventListener("click", (event) => {
+      deleteProduct(event);
+    });
+  });
+}
+// Fonction de suppression 
+function deleteProduct(event) {
+  event.preventDefault();
+  //console.log(event.target);
+  //on pointe le parent hiéarchique <article>`du lien à supp
+  let myProduct = event.target.closest(`article`);
+  let id = myProduct.getAttribute("data-id");
+  let color = myProduct.getAttribute("data-color");
+  //console.log("LS", productLocalStorage)
+  const resultIndex = productLocalStorage.findIndex(
+    (e) => e.id === id && e.color === color
+  );
+  //ligne de l'index
+  //console.log("resultIndex", resultIndex);
+  // On supprime
+  productLocalStorage.splice(resultIndex, 1);
+  // On vérifie que le LS est correct après supression
+  // console.log("productLocalStorage + supression", productLocalStorage);
+  // On met à jour le LS du navigateur
+  localStorage.setItem("product", JSON.stringify(productLocalStorage));
+  // On demande à enlever l'article du DOM
+  myProduct.parentNode.removeChild(myProduct);
+  // On supprime le produit du panierComplet
+  panierComplet.splice(resultIndex, 1);
+  // On recalcule
+  calculQuantite();
+  calculTotalPrice();
+}
+//Evènements sur les inputs quantité
+function eventupdateQuantity() {
+  let changeQty = document.querySelectorAll(".itemQuantity");
+  //console.log("changeQty", changeQty);
+  changeQty.forEach((item) => {
+    item.addEventListener("change", (event) => {
+      updateQuantity(event);
+    });
+  });
+}
+// Fonction sur les quantités
+function updateQuantity(event) {
+  event.preventDefault();
+  choiceQty = Number(event.target.value);
+    // On pointe le parent hiérarchique <article> de l'input "itemQuantity"
+  let myArticle = event.target.closest(`article`);
+  let colorMyArticle = myArticle.getAttribute("data-color");
+  let idMyArticle = myArticle.getAttribute("data-id");
+  // On récupère dans le localStorage l'élément (même id et même couleur) dont on veut modifier la quantité
+  const resultIndex = productLocalStorage.findIndex(
+    (item) => item.id === idMyArticle && item.color === colorMyArticle
+  ); 
+  // Si la quantité est comprise entre 1 et 100 et que c'est un nombre entier on met à jour la quantité dans le localStorage et le DOM
+  if (choiceQty > 0 && choiceQty <= 100) {
+    let LS = JSON.parse(localStorage.getItem("product")); 
+    //console.log(LS[resultIndex])
+    LS[resultIndex].quantity = choiceQty;
+    localStorage.setItem("product", JSON.stringify(LS));
+    // Maj du produit du panierComplet
+    panierComplet[resultIndex].quantity = choiceQty;
+    //console.log(panierComplet);
+    // Et, on recalcule la quantité et le prix total du panier
+    // On recalcule
+    calculQuantite();
+    calculTotalPrice();
+  }
+}
+
+function calculQuantite() {
   
+  //console.log("mon panier complet",panierComplet)
+  
+  let qty = 0;
 
+  for (let product of panierComplet) {    
+    qty += product.quantity;
+  }
+  
+  document.getElementById("totalQuantity").innerHTML = qty;
+}
 
+function calculTotalPrice() {
+   
+  let price = 0;
 
-/********************* */
+  for (let product of panierComplet) {
+    price += product.price * product.quantity;
+  }
 
-// if (basket) {
-//   for (const key of Object.keys(basket)) {
-//     fetch(`http://localhost:3000/api/products/${key}`).then((response) =>
-//       response.json()
-//     );
-//     console.log(key);
-//   }
-// }
-/***************************** */
-
-// function displayCart() {
-//   let tab = JSON.parse(localStorage.getItem("basket")) || {};
-
-//   let displayArticle = document.querySelector("#cart__items");
-
-//   if (localStorage.getItem("basket") != null) {
-//     for (let i = 0; i < tab.length; i++) {
-//       let id = tab[i].id;
-//       let quantity = tab[i].quantity;
-//       let color = tab[i].color;
-
-//       console.table("product in LS", tab);
-
-//       let cartFetch = function () {
-//         fetch(`http://localhost:3000/api/products/${id}`)
-//           .then((response) => response.json())
-//           .then((results) => {
-//             let article = createArticle(
-//               results.imageUrl,
-//               results.altTxt,
-//               id,
-//               color,
-//               results.name,
-//               results.price,
-//               quantity
-//             );
-//             displayArticle.appendChild(article);
-//           });
-//       };
-//       cartFetch();
-//     }
-//   }
-// }
-// displayCart();
-//(src, alt, id, color, name, price, quantity)
-
-//function createArticle(id, color, src, alt, name, price, quantity) {
-//let displayArticle = document.querySelector("#cart__items");
-//   let article = document.createElement("article");
-//   article.classList.add("cart__item");
-//   article.dataset.id = results.id;
-//   article.dataset.color = results.color;
-//   //displayArticle.appendChild(article);
-
-//   let div = document.createElement("div");
-//   div.classList.add("cart__item__img");
-//   article.appendChild(div);
-
-//   let image = createImage();
-//   //let image = document.createElement("img");
-//   image.classList.add("cart__item__img");
-//   // image.src = results.imageUrl;
-//   // image.alt = results.altTxt;
-//   div.appendChild(image);
-
-//   let div2 = document.createElement("div");
-//   div2.classList.add("cart__item__content");
-//   article.appendChild(div2);
-//   let div3 = document.createElement("div");
-//   div3.classList.add("cart__item__content__description");
-//   div2.appendChild(div3);
-
-//   let kanapName = createName();
-//   //let kanapName = document.createElement("h2");
-//   //kanapName.innerText = results.name;
-//   div3.appendChild(kanapName);
-//   let kanapColor = document.createElement("p");
-//   kanapColor.innerText = color;
-//   div3.appendChild(kanapColor);
-
-//   let KanapPrice = createKanapPrice();
-//   //let KanapPrice = document.createElement("p");
-//   //KanapPrice.innerText = results.price;
-//   div3.appendChild(KanapPrice);
-//   let div4 = document.createElement("div");
-//   div4.classList.add("cart__item__content__settings");
-//   div2.appendChild(div4);
-
-//   let qty = document.createElement("div");
-//   qty.classList.add("cart__item__content__settings__quantity");
-//   div4.appendChild(qty);
-
-//   let p = document.createElement("p");
-//   p.innerText = "Qté : ";
-//   qty.appendChild(p);
-
-//   let input = document.createElement("input");
-//   input.type = "number";
-//   input.classList.add("itemQuantity");
-//   input.name = "itemQuantity";
-//   input.min = "1";
-//   input.max = "100";
-//   input.value = quantity;
-//   qty.appendChild(input);
-
-//   let div6 = document.createElement("div");
-//   div6.classList.add("cart__item__content__settings__delete");
-//   div4.appendChild(div6);
-//   let deleteP = document.createElement("p");
-//   deleteP.classList.add("deleteItem");
-//   deleteP.textContent = "Supprimer";
-//   div6.appendChild(deleteP);
-// }
-
-//createArticle();
-
-// function createImage(results) {
-//   const image = document.createElement("img");
-//   image.src = results.imageUrl;
-//   image.alt = results.altTxt;
-//   return image;
-// }
-// function createName() {
-//   const kanapName = document.createElement("h2");
-//   kanapName.innerText = results.name;
-//   return kanapName;
-// }
-// function createKanapPrice() {
-//   const KanapPrice = document.createElement("p");
-//   KanapPrice.innerText = results.price;
-//   return KanapPrice;
+  document.getElementById("totalPrice").innerHTML = price;
+}

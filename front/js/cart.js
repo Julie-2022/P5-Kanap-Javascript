@@ -1,6 +1,5 @@
 async function displayCart() {
   //console.log("displayCart");
-
   const basket = JSON.parse(localStorage.getItem("basket")) || {};
   if (basket) {
     // loop through the basket object to get the items from the api
@@ -19,30 +18,23 @@ async function displayCart() {
         color = value.color;
         quantity = value.quantity;
       }
-      // console.log(results.imageUrl, results.altTxt, results.id, results.colors, results.name, results.price)
-      //console.log(basket);
-      // console.table(basket[key]);
-      Object.values(basket[key]).forEach((color) => {
+    Object.values(basket[key]).forEach((color) => {
         //console.log(color, quantity);
         console.log(basket[key]);
-
         let displayArticle = document.querySelector("#cart__items");
         let article = document.createElement("article");
         article.classList.add("cart__item");
         article.dataset.id = results.id;
         article.dataset.color = results.color;
         displayArticle.appendChild(article);
-
         let div = document.createElement("div");
         div.classList.add("cart__item__img");
         article.appendChild(div);
-
         let image = document.createElement("img");
         image.classList.add("cart__item__img");
         image.src = results.imageUrl;
         image.alt = results.altTxt;
         div.appendChild(image);
-
         let div2 = document.createElement("div");
         div2.classList.add("cart__item__content");
         article.appendChild(div2);
@@ -54,7 +46,6 @@ async function displayCart() {
         div3.appendChild(kanapName);
         let kanapColor = document.createElement("p");
         kanapColor.innerText = color.color;
-
         div3.appendChild(kanapColor);
         let KanapPrice = document.createElement("p");
         KanapPrice.innerText = results.price + " €";
@@ -62,15 +53,12 @@ async function displayCart() {
         let div4 = document.createElement("div");
         div4.classList.add("cart__item__content__settings");
         div2.appendChild(div4);
-
         let DivQuantity = document.createElement("div");
         DivQuantity.classList.add("cart__item__content__settings__quantity");
         div4.appendChild(DivQuantity);
-
         let p = document.createElement("p");
         p.innerText = "Qté : ";
         DivQuantity.appendChild(p);
-
         let input = document.createElement("input");
         input.type = "number";
         input.classList.add("itemQuantity");
@@ -79,7 +67,6 @@ async function displayCart() {
         input.max = "100";
         input.value = color.quantity; //|| newValue;
         DivQuantity.appendChild(input);
-
         let div6 = document.createElement("div");
         div6.classList.add("cart__item__content__settings__delete");
         div4.appendChild(div6);
@@ -104,51 +91,9 @@ async function displayCart() {
         });
         //window.location.reload();
       });
-      /********************** Suppr *************************** */
-      function deleteProduct() {
-        //on recupere le btn delete
-        let deleteBtn = document.querySelectorAll(".deleteItem");
-        // //on loop a travers tt les btn delete
-        for (let i = 0; i < deleteBtn.length; i++) {
-          //   //event listener click
-          deleteBtn[i].addEventListener("click", (event) => {
-            event.preventDefault();
-            //     //on recupere l'id et la couleur
-            let deleteId = key;
-            let deleteColor = color;
-            console.log(deleteId);
-            console.log(deleteColor);
 
-            const targetIndex = basket[key];
-            console.log("targetIndex", targetIndex);
-            console.log(targetIndex !== -1); // return true ou false si la couleur est stockée ou pas
-            let articleToDelete = document.querySelector(
-              `article[data-id="${deleteId}"][data-color="${deleteColor}"]`
-            );
-            articleToDelete = event.target.closest("article");
-            console.log("avant remove article", basket);
-            articleToDelete.remove("article");
-            console.log("après remove article", basket);
-            console.log(articleToDelete, basket, "element à suppr");
-            console.log("key", key, deleteId);
-            /************** */
-
-            const deleteItem = Object.values(basket).find(
-              (product) =>
-                product.id == deleteId && product.color == deleteColor
-            );
-            basket[key].splice(deleteItem, 1);
-            console.log(basket);
-
-            //On met à jour le LS du navigateur
-            localStorage.setItem("basket", JSON.stringify(basket));
-            console.log(localStorage);
-            totalQuantity();
-            totalProductsPrice();
-          });
-        }
-      }
-      deleteProduct();
+      /********************** Suppr *************************** */ 
+      
       /******************* TotalQty ******************** */
       function totalQuantity() {
         let totalQuantity = document.querySelector("#totalQuantity");
@@ -164,6 +109,7 @@ async function displayCart() {
         totalQuantity.innerText = totalQty;
       }
       totalQuantity();
+      /********************* */
       /*****************Total Price 1er essai ************** */
       //    let totalPrice = document.querySelector("#totalPrice");
       // totalP = 0;
@@ -173,6 +119,7 @@ async function displayCart() {
       //   }
       // }
       // totalPrice.innerText = totalP;
+      /************** TotalPrice ************** */
       /************** TotalPrice ********************** */
       function totalProductsPrice() {
         let totalPrice = 0; //document.getElementById("totalPrice") &&
@@ -182,7 +129,6 @@ async function displayCart() {
         for (let id in basket) {
           for (let color in basket[id]) {
             totalPriceId = parseInt(basket[id][color].quantity * results.price);
-
             totalP += totalPriceId;
             console.log("Total prix/id et du panier", totalPriceId, totalP);
             console.log(
@@ -197,7 +143,7 @@ async function displayCart() {
       }
       totalProductsPrice();
       /********************************************* */
-    }
+        }
   }
 }
 displayCart();

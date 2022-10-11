@@ -110,18 +110,18 @@ async function displayCart() {
       });
 
       /********************** Suppr *************************** */
-            function deleteArticle() {
-              let deleteItem = document.querySelectorAll(".deleteItem");
-              deleteItem.forEach((deleteItem) => {
-                deleteItem.addEventListener("click", (e) => {
-                  e.preventDefault();
-                  let thisArticle = deleteItem.closest("article")
-                  console.log(thisArticle)
-                });
-                })
-              }
+      //       function deleteArticle() {
+      //         let deleteItem = document.querySelectorAll(".deleteItem");
+      //         deleteItem.forEach((deleteItem) => {
+      //           deleteItem.addEventListener("click", (e) => {
+      //             e.preventDefault();
+      //             let thisArticle = deleteItem.closest("article")
+      //             console.log(thisArticle)
+      //           });
+      //           })
+      //         }
 
-      deleteArticle()
+      // deleteArticle()
       /********************** Supprimer ************************* */
       //       function deleteArticle() {
       //         let basket = JSON.parse(localStorage.getItem("basket"));
