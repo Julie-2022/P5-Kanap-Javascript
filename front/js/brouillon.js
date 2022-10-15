@@ -1,3 +1,205 @@
+/*************ce que j'ai fais pour deleteProduct :  ******************/
+ /********************** Suppr *************************** */
+      function deleteProduct(basket,idToremove) {
+        //on recupere le btn delete
+        let deleteBtn = document.querySelectorAll(".deleteItem");
+        // //on loop a travers tt les btn delete
+        for (let i = 0; i < deleteBtn.length; i++) {
+          //   //event listener click
+          deleteBtn[i].addEventListener("click", (event) => {
+            event.preventDefault();
+            //     //on recupere l'id et la couleur
+            let deleteId = key;
+            let deleteColor = color;
+        console.log(deleteId);
+        console.log(deleteColor);
+            const targetIndex = basket[key];
+        console.log(targetIndex !== -1); // return true ou false si la couleur est stockée ou pas
+            let articleToDelete = document.querySelector(
+              `article[data-id="${deleteId}"][data-color="${deleteColor}"]`
+            );
+            articleToDelete = event.target.closest("article");
+        console.log("avant remove article", basket);
+            articleToDelete.remove("article");
+        console.log("après remove article", basket);
+        console.log(articleToDelete, basket, "element à suppr");
+        console.log("key", key, deleteId);
+            /************** */
+            /*-----ce code fonctionne si on suppr le produit d'en haut pour produit mm id mm couleur ----*/
+            // const deleteItem = Object.values(basket).find(
+            //   (product) =>
+            //     product.id == deleteId && product.color == deleteColor
+            // );
+            // basket[key].splice(deleteItem, 1);
+            // console.log(basket);
+            // console.log("deleteItem", deleteItem)// undefined
+
+            /************************** */
+            /*---- ce code suppr tjrs le 2ème kanap de mm id ----*/
+            if (targetIndex.length >= 2) {
+              let productIndex = targetIndex.findIndex(
+                (x) => x.color === deleteColor
+              );
+              targetIndex.splice(productIndex, 1);
+            } else {
+              delete targetIndex;
+            }
+            console.log("targetIndex", targetIndex)
+/***************************************** */
+// console.log(basket);
+//  if (targetIndex.length >= 2) {
+//   let productIndex = basket[key].findIndex(
+//     (x) => x.color === deleteColor
+//     );
+//     console.log("productIndex", productIndex);
+//     basket[key].splice(productIndex, 1);
+//     // basket[key].removeItem(productIndex)
+//     //delete productIndex
+//     console.log("basket + supression", basket);
+// }
+/*************** */
+// else
+//   if (targetIndex) {
+// //  delete basket[key];
+// const deleteItem = basket[id].findIndex(
+//               (y) =>
+//                 y.id === deleteId && y.color === deleteColor //|| product.deleteId <= 1
+//             );
+//             //basket[key].removeItem(deleteItem)
+//             //delete deleteItem //basket[key].color//
+//             /**/ basket[key].splice(deleteItem, 1);
+//             console.log(basket);
+// }
+// else {
+//  delete basket[key].splice(targetIndex, 1)
+//   //[{color: deleteColor, quantity: quantity}];
+//  }
+
+
+/***************************************** */
+            //On met à jour le LS du navigateur
+            localStorage.setItem("basket", JSON.stringify(basket));
+            console.log(localStorage);
+            totalQuantity();
+            totalProductsPrice();
+          });
+        }
+      }
+      deleteProduct();
+      
+      /*****************Total Price 1er essai ************** */
+      //    let totalPrice = document.querySelector("#totalPrice");
+      // totalP = 0;
+      // for (let id in basket) {
+      //   for (let color in basket[id]) {
+      //     totalP += parseInt((basket[id][color].quantity) * results.price);
+      //   }
+      // }
+      // totalPrice.innerText = totalP;
+      /************** TotalPrice ************** */
+      /************** TotalPrice ********************** */
+      
+      // totalProductsPrice();
+      /********************************************* */
+  
+// displayCart();
+
+/******************************************** */
+
+/***************************************************** */
+//   function deleteProduct(id, color) {
+//     //on recupere le btn delete
+//     let deleteBtn = document.querySelectorAll(".deleteItem");
+//     //on loop a travers tt les btn delete
+//     for (let i = 0; i < deleteBtn.length; i++) {
+//       //event listener click
+//       deleteBtn[i].addEventListener("click", (event) => {
+//         event.preventDefault();
+//         //on recupere l'id et la couleur
+//         let deleteId = key;
+//         let deleteColor = color;
+//         console.log("deleteId", deleteId);
+//         console.log("deleteColor", color);
+//         const targetIndex = basket[key]
+//         //  console.log("targetIndex", targetIndex);
+//         //  console.log(targetIndex !== -1); // return true ou false si la couleur est stockée ou pas
+//         let articleToDelete = document.querySelector(
+//           `article[data-id="${deleteId}"][data-color="${deleteColor}"]`
+//         );
+//         articleToDelete = event.target.closest("article");
+//         // console.log("avant remove article", basket);
+//         articleToDelete.remove("article");
+//         // console.log("après remove article", basket);
+//         // console.log(articleToDelete, basket, "element à suppr");
+//         // console.log("key", key, deleteId);
+//         /****** Suppr tjrs le premier kanap de mm id ******** */
+
+//         const deleteItem = Object.values(basket).find(
+//           (product) =>
+//             product.id === deleteId && product.color === color //|| product.deleteId <= 1
+//         );
+//         console.log(deleteId, "&&", deleteColor)
+//         console.log("deleteItem", deleteItem);
+//         //  delete basket[key].color//deleteItem
+//         /**/ basket[key].splice(deleteItem, 1);
+//         console.log(basket);
+/********** garde le 1er kanap suppr de mm id ************** */
+// if (targetIndex.length >= 2) {
+//   let productIndex = targetIndex.findIndex(
+//     (x) => x.color === deleteColor
+//   );
+//   targetIndex.splice(productIndex, 1);
+// } else {
+//   delete targetIndex;
+// }
+/******************************* */
+// console.log(basket);
+//  if (targetIndex.length >= 2) {
+//   let productIndex = basket[key].findIndex(
+//     (x) => x.color === deleteColor
+//     );
+//     console.log("productIndex", productIndex);
+//     basket[key].splice(productIndex, 1);
+//     // basket[key].removeItem(productIndex)
+//     //delete productIndex
+//     console.log("basket + supression", basket);
+// }
+// /*************** */
+// else
+//   if (targetIndex) {
+// //  delete basket[key];
+// const deleteItem = basket[id].findIndex(
+//               (y) =>
+//                 y.id === deleteId && y.color === deleteColor //|| product.deleteId <= 1
+//             );
+//             //basket[key].removeItem(deleteItem)
+//             //delete deleteItem //basket[key].color//
+//             /**/ basket[key].splice(deleteItem, 1);
+//             console.log(basket);
+// }
+// else {
+//  delete basket[id]
+//   //[{color: deleteColor, quantity: quantity}];
+//  }
+
+/********************** */
+//       else {
+//    alert("Votre panier est vide");
+//  }
+//         /************************ */
+//         //On met à jour le LS du navigateur
+//         /*** */ //localStorage.setItem("basket", JSON.stringify(basket));
+//         console.log(localStorage);
+
+//         totalQuantity();
+//         totalProductsPrice();
+//       });
+//     }
+//   }
+//   deleteProduct();
+
+
+/*********************************************************************************** */
 // Création d'une var. qui appel la methode pour creer les éléments de la propriété de l'id correspondant à "cart__items"
 let elementQuantity = document.getElementById("cart__items");
 // Variable pour stocker l'ensemble des infos du panier

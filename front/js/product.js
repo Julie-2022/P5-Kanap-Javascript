@@ -127,6 +127,7 @@ function isOrderInvalid(color, quantity) {
     return true; // pour rester sur la page = stop
   }
 }
+
 function redirectToCart() {
   window.location.href = "cart.html";
 }
