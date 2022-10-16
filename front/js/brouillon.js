@@ -392,3 +392,23 @@ function calculTotalPrice() {
 
   document.getElementById("totalPrice").innerHTML = price;
 }
+
+/************** Méthode Benjamin ****************/
+async function changeQuantity(_id, color, oldQty, newQty) {
+  if (oldQty == newQty) {
+    return;
+  } else {
+    let colorIndex = basket[id].findIndex((item) => item.color === color);
+    basket[_id][colorIndex].quantity = newQty;
+  }
+  
+  console.log("coucou")
+  alert("La quantité de votre panier à été modifée");
+  //addTotalQuantity(infos, basket);
+  //addTotalToPage(infos, basket);
+  (await addTotalQuantity()) && (await addTotalToPage());
+  localStorage.setItem("basket", JSON.stringify(basket));
+}
+// et dans addProductToPage
+
+changeQuantity(elemInfos.id, color.color, parseInt(color.quantity), parseInt(input.value))
