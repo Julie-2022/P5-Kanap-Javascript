@@ -18,14 +18,13 @@ async function main() {
   addTotalToPage(infos, basket);
   addTotalQuantity(infos, basket);
   updatePriceAndQuantity(infos, basket);
-  //deleteProduct(basket, IdToRemove)
+  deleteProduct(basket, infos);
 }
 main();
 
 async function addTotalQuantity(infos, basket) {
   totalQty = 0;
   for (let elem of Object.keys(basket)) {
-    let elemInfos = await infos.find((el) => el._id === elem);
     for (let color of basket[elem]) {
       totalQty += parseInt(color.quantity);
     }
@@ -34,7 +33,6 @@ async function addTotalQuantity(infos, basket) {
   totalQuantity.innerText = totalQty;
 }
 
-/********************* */
 
 async function addTotalToPage(infos, basket) {
   let total = 0;
@@ -51,37 +49,101 @@ async function addTotalToPage(infos, basket) {
 
 /*************************** */
 
-async function updatePriceAndQuantity(infos, basket) {
-  for (let elem of Object.keys(basket)) {
-    let changeInput = document.querySelectorAll(".itemQuantity");
-    changeInput.forEach((item) => {
-      item.addEventListener("change", (event) => {
-        event.preventDefault();
-        console.log("event", event)
-        choiceQty = Number(event.target.value);
-        console.log("choiceQty", choiceQty);
-        // On pointe le parent hiérarchique <article> de l'input "itemQuantity"
-        let myArticle = event.target.closest("article");
-        let colorMyArticle = myArticle.getAttribute("data-color");
-        let idMyArticle = myArticle.getAttribute("data-id");
-        console.log(myArticle);
-        // On récupère dans le localStorage l'élément (même id et même couleur) dont on veut modifier la quantité
-        const colorIndex = basket[idMyArticle]?.findIndex(
-          (item) => item.color === colorMyArticle
-        );
-        console.log(colorIndex !== -1); // return true ou false si la couleur est stockée ou pas
-        if (colorIndex !== -1) { //si la couleur est présente
-          // === colorMyArticle // != -1 : (-1) : couleur non stockée
-          basket[idMyArticle][colorIndex].quantity = choiceQty;
-        }
-        localStorage.setItem("basket", JSON.stringify(basket));
-        addTotalToPage(infos, basket);
-        addTotalQuantity(infos, basket);
-      });
+function updatePriceAndQuantity(infos, basket) {
+  //for (let elem of Object.keys(basket)) {
+  let changeInputs = document.getElementsByClassName("itemQuantity");
+  //console.log(changeInputs);
+  Array.from(changeInputs).forEach((item) => {
+    item.addEventListener("change", (event) => {
+      event.preventDefault();
+      console.log(item);
+      choiceQty = Number(event.target.value);
+
+      // On pointe le parent hiérarchique <article> de l'input "itemQuantity"
+      let myArticle = event.target.closest("article");
+      let colorMyArticle = myArticle.getAttribute("data-color");
+      let idMyArticle = myArticle.getAttribute("data-id");
+
+      // On récupère dans le localStorage l'élément (même id et même couleur) dont on veut modifier la quantité
+      const colorIndex = basket[idMyArticle]?.findIndex(
+        (item) => item.color === colorMyArticle
+      );
+      if (colorIndex !== -1) {
+        //si la couleur est présente
+        // === colorMyArticle // != -1 : (-1) : couleur non stockée
+        basket[idMyArticle][colorIndex].quantity = choiceQty;
+        alert("La quantité de votre panier à été modifée");
+      }
+      localStorage.setItem("basket", JSON.stringify(basket));
+      addTotalToPage(infos, basket);
+      addTotalQuantity(infos, basket);
     });
+  });
+}
+
+function deleteProduct(basket, infos) {
+  let deleteItem = document.querySelectorAll(".deleteItem");
+  deleteItem.forEach((btnDelete) => {
+    btnDelete.addEventListener("click", (e) => {
+      e.preventDefault();
+      console.log("e", e);
+
+      let thisArticle = e.target.closest("article");
+      const colorThisArticle = thisArticle.getAttribute("data-color");
+      const idThisArticle = thisArticle.getAttribute("data-id");
+      console.log(thisArticle);
+      console.log(idThisArticle, colorThisArticle);
+
+      const IndexToDelete = basket[idThisArticle]?.findIndex(
+        (x) => x.color === colorThisArticle
+      );
+
+      basket[idThisArticle].splice(IndexToDelete, 1);
+      console.log(IndexToDelete !== -1);
+      console.log("basket1", basket);
+
+      localStorage.setItem("basket", JSON.stringify(basket));
+      console.log(IndexToDelete !== -1);
+
+      console.log(basket[idThisArticle] <= 1);
+      /***** */
+
+      deleteArticleFromPage(basket, infos, idThisArticle, colorThisArticle);
+      deleteProductEmptyFromBasket(basket, idThisArticle);
+      addTotalToPage(infos, basket);
+      addTotalQuantity(infos, basket);
+      basketEmptyMessage(basket, infos);
+    });
+  });
+}
+
+function deleteProductEmptyFromBasket(basket, idThisArticle,) {
+  if (basket[idThisArticle] <= 1) {
+    console.log("jusque là tout va bien", basket[idThisArticle] <= 1);
+    delete basket[idThisArticle];
+    console.log("basket3", basket);
+    localStorage.setItem("basket", JSON.stringify(basket));
   }
 }
-//alert("La quantité de votre panier à été modifée");
+
+function basketEmptyMessage(basket) {
+  //if (basket == {} || basket === null || basket.length === 0) 
+ if (Object.keys(basket) === null || Object.keys(basket).length === 0) {
+     console.log("vide");
+     localStorage.clear();
+     alert("Votre panier est vide ! vous allez être redirigé à l'Accueil...");
+     window.location.href = "index.html";
+  }
+}
+
+
+
+function deleteArticleFromPage(basket, infos, idThisArticle, colorThisArticle) {
+  const articleToDelete = document.querySelector(
+    `article[data-id="${idThisArticle}"][data-color="${colorThisArticle}"]`
+  );
+  articleToDelete.remove();
+}
 
 async function addProductsToPage(infos, basket) {
   for (let elem of Object.keys(basket)) {
@@ -137,6 +199,8 @@ async function addProductsToPage(infos, basket) {
       DivQuantity.appendChild(input);
       let div6 = document.createElement("div");
       div6.classList.add("cart__item__content__settings__delete");
+      //div6.addEventListener("click", () => deleteProduct(basket, infos, elem, color.color))
+
       div4.appendChild(div6);
       let deleteP = document.createElement("p");
       deleteP.classList.add("deleteItem");
@@ -160,60 +224,3 @@ async function addProductsToPage(infos, basket) {
     }
   }
 }
-
-
-// async function changeQuantity(infos, basket) {
-//   for (let elem of Object.keys(basket)) {
-//     let elemInfos = await infos.find((el) => el._id === elem);
-//     for (let color of basket[elem]) {
-//       let inputChange = document.querySelectorAll(".itemQuantity");
-//       inputChange.forEach((Element) => {
-//         Element.addEventListener("change", (event) => {
-//           event.preventDefault();
-
-//           console.log(event, Element);
-
-//           let currentQuantity = color.quantity;
-//           console.log(currentQuantity);
-//           const newValue = Number(inputChange.value);
-//           //const updateQuantity = parseInt((currentQuantity = newValue));
-//           const updateQuantity = Number(newValue)
-//           console.log(updateQuantity);
-//           color.quantity = updateQuantity;
-//           console.table(basket);
-//       //    localStorage.setItem("basket", JSON.stringify(basket));
-//           alert("La quantité de votre panier à été modifée");
-//           addTotalQuantity(infos, basket);
-//           addTotalToPage(infos, basket);
-//         });
-//       })
-//     }
-//   }
-// }
-/****************** modif toutes les quantités  */
-// async function changeQuantity(infos, basket) {
-//   for (let elem of Object.keys(basket)) {
-//     let elemInfos = await infos.find((el) => el._id === elem);
-//     for (let color of basket[elem]) {
-//       let inputChange = document.querySelectorAll(".itemQuantity");
-//       for (let j = 0; j < inputChange.length; j++) {
-//         inputChange[j].addEventListener("change", (event) => {
-//           event.preventDefault();
-
-//           console.log(event);
-//           let currentQuantity = color.quantity;
-//           console.log(currentQuantity);
-//           const newValue = Number(inputChange[j].value);
-//           const updateQuantity = parseInt((currentQuantity[j] = newValue));
-//           console.log(updateQuantity);
-//           color.quantity = updateQuantity;
-//           console.table(basket);
-//           localStorage.setItem("basket", JSON.stringify(basket));
-//           alert("La quantité de votre panier à été modifée");
-//           addTotalQuantity(infos, basket);
-//           addTotalToPage(infos, basket);
-//         });
-//       }
-//     }
-//   }
-// }

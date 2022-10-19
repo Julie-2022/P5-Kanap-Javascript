@@ -1,29 +1,249 @@
+/************************ Fabien 18 oct "?" ******************/
+const listeDeCourses = {
+  codeBarreDesPommes: [{id: 'pinkLadies', qty: 2}, {id: 'nulles', qty: 1}],
+  codeBarreDesPoires: [{id: 'pinkLadies', qty: 2}, {id: 'nulles', qty: 1}],
+  codeBarreDesPeches: [{id: 'pinkLadies', qty: 2}, {id: 'nulles', qty: 1}],
+  codeBarreDesFraises: [{id: 'pinkLadies', qty: 2}, {id: 'nulles', qty: 1}]
+}
+if (listeDeCourses) {
+  if (listeDeCourses.codeBarreDesPoires) {
+    listeDeCourses.codeBarreDesPoires[1].id
+  }
+}
+listeDeCourses?.codeBarreDesPoires[1]?.id
+
+/*************************** Bouton suppr  brouillon de côté du 19 oct */
+//function deleteProductFromBasket(infos, basket, thisArticle, idThisArticle, colorThisArticle, choiceQty) {
+
+//const keyToDelete = `{"${idThisArticle}":[{"color":"${colorThisArticle}","quantity":"${choiceQty}"}]}`
+//const keyToDelete = `${idThisArticle}-${colorThisArticle}`
+//  if (idThisArticle.length >= 2) {
+// delete keyToDelete
+//console.log("keyToDelete", keyToDelete)
+//localStorage.removeItem(keyToDelete)
+
+// localStorage.setItem("basket", JSON.stringify(basket));
+// } else {
+//   //const key = `${idThisArticle}-${colorThisArticle}`
+//localStorage.removeItem(`{"${idThisArticle}":[{"color":"${colorThisArticle}","quantity":"${choiceQty}"}]}`)
+//keyToDelete.remove()
+
+// basket[idThisArticle].splice(keyToDelete, 1);
+// // /**///delete basket[idThisArticle][colorThisArticle];
+// console.log("Supression réalisée", basket);
+
+// //localStorage.setItem("basket", JSON.stringify(basket));
+// }
+// //}
+
+// function deleteArticle(basket, infos) {
+//   for (let elem of Object.keys(basket)) {
+//     for (let color of basket[elem]) {
+//       let deleteItem = document.querySelectorAll(".deleteItem");
+//      // deleteItem.forEach((btnDelete) => {
+//       //  btnDelete.addEventListener("click", (e) => {
+//           e.preventDefault();
+//           console.log("e", e);
+//           //let colorThisArticle = thisArticle.getAttribute("data-color");
+//           //let idThisArticle = thisArticle.getAttribute("data-id");
+//           let thisArticle = document.querySelector(`[data-id="${elem}"]` && `[data-color="${color.color}"]`)
+//           //let thisArticle = e.target.closest("article");
+//           console.log(thisArticle);
+//           // On récupère dans le localStorage l'élément (même id et même couleur) que l'on veut supprimer
+//          // const IndexToDelete = basket[idThisArticle]?.findIndex(
+//          //   (x) => x.color === colorThisArticle
+//          // );
+//          // console.log(IndexToDelete !== -1); // return true ou false si l'id et la couleur sont stockées ou pas
+//           while (thisArticle.firstChild) {
+//             thisArticle.removeChild(thisArticle.lastChild)
+//           }
+//           thisArticle.remove()
+
+//           //(IndexToDelete !== -1) {
+//             //si la couleur est présente
+//             // === colorThisArticle // != -1 : (-1) : couleur non stockée
+//             /**/ //    basket[idThisArticle].splice(IndexToDelete, 1);
+//             if (idThisArticle.length >= 2) {
+//               const IndexToDelete = basket[idThisArticle]?.findIndex(
+//             (x) => x.color === colorThisArticle
+//           );
+//               basket[idThisArticle].splice(IndexToDelete, 1);
+//              // console.log(basket);
+//           // } else if (idThisArticle == 1) {
+//             } else {
+//               //basket.splice(thisArticle, 1);
+//               delete basket[idThisArticle];
+//               console.log("Supression réalisée");
+//           //  } else {
+//               console.log("coucou", basket);
+//             }
+//            })
+//         });
+//       };
+//     }
+//   }
+
+/********************** qd 2 couleurs ça marche ! qd 1 couleur renvoit tableau vide ******************** */
+// function deleteArticle(basket, infos, removeId, idThisArticle) {
+//   let Basket = [];
+//   Basket.push(basket);
+//   console.log(Basket);
+//   for (let elem of Object.keys(basket)) {
+//     for (let color of basket[elem]) {
+//       let deleteItem = document.querySelectorAll(".deleteItem");
+//       deleteItem.forEach((btnDelete) => {
+//         btnDelete.addEventListener("click", (e) => {
+//           e.preventDefault();
+//           console.log("e", e);
+//           let thisArticle = e.target.closest("article");
+//           let colorThisArticle = thisArticle.getAttribute("data-color");
+//           let idThisArticle = thisArticle.getAttribute("data-id");
+//           console.log(thisArticle);
+//           // On récupère dans le localStorage l'élément (même id et même couleur) que l'on veut supprimer
+//           if (idThisArticle.length >= 2) {
+//             const IndexToDelete = basket[idThisArticle]?.findIndex(
+//               (x) => x.color === colorThisArticle
+//             );
+//             console.log(IndexToDelete !== -1); // return true ou false si l'id et la couleur sont stockées ou pas
+//           //}
+//             if (IndexToDelete !== -1) {
+//               //si la couleur est présente
+//               // === colorThisArticle // != -1 : (-1) : couleur non stockée
+//               /**/ //    basket[idThisArticle].splice(IndexToDelete, 1);
+//               basket[idThisArticle].splice(IndexToDelete, 1);
+//               console.log(basket);
+
+//             } else {
+
+//               //delete basket[idThisArticle];
+//               console.log("Supression réalisée");
+//               console.log(basket);
+//             }
+//           }
+//         });
+//       });
+//     }
+//   }
+// }
+
+/************************************ */
+// Suppression d'un produit
+
+// function deleteProduct(infos) {
+//   const basketAll = JSON.parse(localStorage.getItem("basket"));
+//   if(basketAll){
+//     Array.from(basketAll).sort(( a, b ) => a.id.localeCompare(b.id));
+//   }
+//   console.table(basketAll); // => affiche les pdts du panier
+
+//   let deleteBtns = document.getElementsByClassName("deleteItem");
+
+//   Array.from(deleteBtns).forEach((itemToDelete) => {
+//     itemToDelete.addEventListener("click", (e) => {
+//       e.preventDefault();
+//       console.log(itemToDelete, deleteBtns);
+//       //let article = deleteBtns.closest(".cart__item");
+//       let thisArticle = e.target.closest("article");
+//       console.log(thisArticle);
+
+//       //let basket = JSON.parse(localStorage.getItem("basket"));
+//       console.table(basketAll);
+
+//       const thoseDataMatch = Array.from(basketAll).find(// => variable qui récupère l'id de l'élément supprimé
+//         (el) => el.id === article.dataset.id
+//       );
+//       console.log(thoseDataMatch);
+
+//       if (thoseDataMatch) {// => méthode qui renvoie une correspondance-> mise dans la condition -
+//         const indexLocalStorageProduct = Array.from(basketAll).findIndex((product) => {
+//           return (
+//             product.id === article.dataset.id &&
+//             article.dataset.color === product.color
+//           );
+//         });
+
+//         basketAll.splice(indexLocalStorageProduct, 1);// =>méthode(splice) pour supprimer (ou remplacer) un élément (objet) ds le LS
+//         // |=> le 1 indique que l'on supprime 1 élément (un élément à chaque clic)
+
+//         localStorage.setItem("produits", JSON.stringify(basket));//réinitialisation du localStorage
+//         location.reload();//(optionnel) raffraîchissement de la page
+//       }
+
+//     });
+//   });
+// }
+
+/****************** delete 18 octobre ********************/
+/************************************************* */
+// function deleteArticle(basket, infos, removeId) {
+//   // let Basket = [];
+//   // Basket.push(basket);
+//   // console.log(Basket);
+//   for (let elem of Object.keys(basket)) {
+//     for (let color of basket[elem]) {
+//       let deleteItem = document.querySelectorAll(".deleteItem");
+//       deleteItem.forEach((btnDelete) => {
+//         btnDelete.addEventListener("click", (e) => {
+//           e.preventDefault();
+//           console.log("e", e);
+//           let thisArticle = e.target.closest("article");
+//           let colorThisArticle = thisArticle.getAttribute("data-color");
+//           let idThisArticle = thisArticle.getAttribute("data-id");
+//           console.log(thisArticle);
+//           // On récupère dans le localStorage l'élément (même id et même couleur) que l'on veut supprimer
+//           const IndexToDelete = basket[idThisArticle]?.findIndex(
+//             (x) => x.color === colorThisArticle
+//           );
+//           console.log(IndexToDelete !== -1); // return true ou false si l'id et la couleur sont stockées ou pas
+//           if (IndexToDelete !== -1) {
+//             //si la couleur est présente
+//             // === colorThisArticle // != -1 : (-1) : couleur non stockée
+//             /**/ //    basket[idThisArticle].splice(IndexToDelete, 1);
+//             if (idThisArticle.length >= 2) {
+//               basket[idThisArticle].splice(IndexToDelete, 1);
+//              // console.log(basket);
+//           // } else if (idThisArticle == 1) {
+//             } else {
+//               //basket.splice(thisArticle, 1);
+//               delete basket[idThisArticle];
+//               console.log("Supression réalisée");
+//           //  } else {
+//               console.log("coucou", basket);
+//             }
+//            }
+//         });
+//       });
+//     }
+//   }
+// }
+
+
 /*************ce que j'ai fais pour deleteProduct :  ******************/
  /********************** Suppr *************************** */
-      function deleteProduct(basket,idToremove) {
-        //on recupere le btn delete
-        let deleteBtn = document.querySelectorAll(".deleteItem");
-        // //on loop a travers tt les btn delete
-        for (let i = 0; i < deleteBtn.length; i++) {
-          //   //event listener click
-          deleteBtn[i].addEventListener("click", (event) => {
-            event.preventDefault();
-            //     //on recupere l'id et la couleur
-            let deleteId = key;
-            let deleteColor = color;
-        console.log(deleteId);
-        console.log(deleteColor);
-            const targetIndex = basket[key];
-        console.log(targetIndex !== -1); // return true ou false si la couleur est stockée ou pas
-            let articleToDelete = document.querySelector(
-              `article[data-id="${deleteId}"][data-color="${deleteColor}"]`
-            );
-            articleToDelete = event.target.closest("article");
-        console.log("avant remove article", basket);
-            articleToDelete.remove("article");
-        console.log("après remove article", basket);
-        console.log(articleToDelete, basket, "element à suppr");
-        console.log("key", key, deleteId);
+      // function deleteProduct(basket,idToremove) {
+      //   //on recupere le btn delete
+      //   let deleteBtn = document.querySelectorAll(".deleteItem");
+      //   // //on loop a travers tt les btn delete
+      //   for (let i = 0; i < deleteBtn.length; i++) {
+      //     //   //event listener click
+      //     deleteBtn[i].addEventListener("click", (event) => {
+      //       event.preventDefault();
+      //       //     //on recupere l'id et la couleur
+      //       let deleteId = key;
+      //       let deleteColor = color;
+      //   console.log(deleteId);
+      //   console.log(deleteColor);
+      //       const targetIndex = basket[key];
+      //   console.log(targetIndex !== -1); // return true ou false si la couleur est stockée ou pas
+      //       let articleToDelete = document.querySelector(
+      //         `article[data-id="${deleteId}"][data-color="${deleteColor}"]`
+      //       );
+      //       articleToDelete = event.target.closest("article");
+      //   console.log("avant remove article", basket);
+      //       articleToDelete.remove("article");
+      //   console.log("après remove article", basket);
+      //   console.log(articleToDelete, basket, "element à suppr");
+      //   console.log("key", key, deleteId);
             /************** */
             /*-----ce code fonctionne si on suppr le produit d'en haut pour produit mm id mm couleur ----*/
             // const deleteItem = Object.values(basket).find(
@@ -36,15 +256,15 @@
 
             /************************** */
             /*---- ce code suppr tjrs le 2ème kanap de mm id ----*/
-            if (targetIndex.length >= 2) {
-              let productIndex = targetIndex.findIndex(
-                (x) => x.color === deleteColor
-              );
-              targetIndex.splice(productIndex, 1);
-            } else {
-              delete targetIndex;
-            }
-            console.log("targetIndex", targetIndex)
+            // if (targetIndex.length >= 2) {
+            //   let productIndex = targetIndex.findIndex(
+            //     (x) => x.color === deleteColor
+            //   );
+            //   targetIndex.splice(productIndex, 1);
+            // } else {
+            //   delete targetIndex;
+            // }
+            // console.log("targetIndex", targetIndex)
 /***************************************** */
 // console.log(basket);
 //  if (targetIndex.length >= 2) {
@@ -78,14 +298,14 @@
 
 /***************************************** */
             //On met à jour le LS du navigateur
-            localStorage.setItem("basket", JSON.stringify(basket));
-            console.log(localStorage);
-            totalQuantity();
-            totalProductsPrice();
-          });
-        }
-      }
-      deleteProduct();
+      //       localStorage.setItem("basket", JSON.stringify(basket));
+      //       console.log(localStorage);
+      //       totalQuantity();
+      //       totalProductsPrice();
+      //     });
+      //   }
+      // }
+      // deleteProduct();
       
       /*****************Total Price 1er essai ************** */
       //    let totalPrice = document.querySelector("#totalPrice");
