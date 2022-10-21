@@ -327,6 +327,16 @@ function IsFormInvalid() {
   });
 }
 
+function EmailInvalid() {
+    const email = document.querySelector("#email").value
+    const regex =/^[A-Za-z0-9+_.-]+@(.+)$/
+  if (regex.test(email) === false) {
+        alert("Merci d'entrer un email valide")
+        return true
+    }
+    return false
+}
+
 const boutonCommander = document.getElementById("order");
 
 function submitForm(basket, infos, productsList) {
@@ -353,6 +363,7 @@ function submitForm(basket, infos, productsList) {
     console.log("idProducts", idProducts);
 
     if (IsFormInvalid()) return;
+    if (EmailInvalid()) return;
 
     // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
@@ -385,14 +396,12 @@ function submitForm(basket, infos, productsList) {
         console.log(form.elements.firstName);
         console.log(form.elements.firstName.value);
         // on redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
-        // document.location.href = `confirmation.html?orderId=${data.orderId}`;
+       /// document.location.href = `confirmation.html?orderId=${data.orderId}`;
       })
       .catch((err) => {
         console.log("Erreur Fetch product.js", err);
         alert("Un problème a été rencontré lors de l'envoi du formulaire.");
       });
-    //----------------------------On vide le localStorage --------------------------------------------------
-    // localStorage.clear();
   });
 }
 

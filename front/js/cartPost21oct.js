@@ -324,7 +324,7 @@ async function submitForm(basket, infos, productsList) {//
       event.preventDefault();// Empêche le rechargement de la page
 if (productsList.length === 0) alert("Please select items to buy")
 
-      console.log(Object.keys(basket), productsList)
+      //console.log(Object.keys(basket), productsList)
 
      const form = document.querySelector(".cart__order__form")
    console.log(form.elements, form)
@@ -334,6 +334,7 @@ if (productsList.length === 0) alert("Please select items to buy")
 //             alert("Votre panier est vide !");
 //       }
 //       else{
+  
             //Récupération des id des produits du panier, dans le localStorage
             let idProducts = [];
             for (let l = 0; l < productsList.length; l++) {
