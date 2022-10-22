@@ -297,13 +297,59 @@ function isFormInvalid() {
 
 function emailInvalid() {
     const email = document.querySelector("#email").value
-    const regex = /^[^. ?!:;,/\\/_-]([._-]?[a-z0-9])+[^.?!: ;,/\\/_-][@][a-z0-9]+[.][a-z][a-z]+$/
+    let regex = /^[^. ?!:;,/\\/_-]([._-]?[a-z0-9])+[^.?!: ;,/\\/_-][@][a-z0-9]+[.][a-z][a-z]+$/
   if (regex.test(email) === false) {
-        alert("Merci d'entrer un email valide")
+        //alert("Merci d'entrer un email valide")
+        emailErrorMsg.textContent = "Veuillez saisir une adresse email valide !";
         return true
     }
     return false
 }
+
+function firstNameInvalid() {
+  const firstName = document.querySelector("#firstName").value
+    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
+  if (regex.test(firstName) === false) {
+       // alert("Merci d'entrer un prénom valide")
+       firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
+        return true
+    }
+    return
+}
+
+function lastNameInvalid() {
+  const lastName = document.querySelector("#lastName").value
+    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
+  if (regex.test(lastName) === false) {
+        //alert("Merci d'entrer un nom valide")
+        lastNameErrorMsg.textContent = "Veuillez renseigner un nom valide !";
+        return true
+    }
+    return
+}
+
+function addressInvalid() {
+const address = document.querySelector("#address").value
+    const regex = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/
+  if (regex.test(address) === false) {
+      //alert("Merci d'entrer une adresse valide")
+      addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
+        return true
+    }
+    return
+}
+
+function cityInvalid() {
+const city = document.querySelector("#city").value
+    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
+  if (regex.test(city) === false) {
+        //alert("Merci d'entrer un nom de ville valide")
+        addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
+        return true
+    }
+    return
+}
+
 
 const boutonCommander = document.getElementById("order");
 
@@ -332,6 +378,10 @@ function submitForm(basket, infos, productsList) {
 
     if (isFormInvalid()) return;
     if (emailInvalid()) return;
+    if (firstNameInvalid()) return;
+    if (lastNameInvalid()) return;
+    if (addressInvalid()) return;
+    if (cityInvalid()) return;
 
     // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
