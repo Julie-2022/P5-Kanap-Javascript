@@ -121,9 +121,9 @@ function saveBasket(colorsOption, numberSelect) {
 // const colorIndex = basket[productId]?.findIndex((item) => item.color === colorsOption);
 // if (colorIndex != -1) {...}
 
-function isOrderInvalid(color, quantity) {
-  if (color == null || color === "" || quantity == null || quantity <= 0) {
-    alert("Please select a color and quantity");
+function isOrderInvalid(colorsOption, numberSelect) {
+  if (colorsOption == null || colorsOption === "" || numberSelect == null || numberSelect <= 0 || numberSelect >= 100) {
+    alert("Avant d'ajouter un canapé à votre panier, veuillez sélectionner la couleur souhaitée ainsi qu'une quantité ne pouvant excéder 100.");
     return true; // pour rester sur la page = stop
   }
 }
