@@ -330,7 +330,7 @@ function submitForm(basket, infos, productsList) {
         console.log(form.elements.firstName);
         console.log(form.elements.firstName.value);
         // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
-    ///   document.location.href = `confirmation.html?orderId=${data.orderId}`;
+       document.location.href = `confirmation.html?orderId=${data.orderId}`;
       })
       .catch((err) => {
         console.log("Erreur Fetch product.js", err);
