@@ -17,21 +17,21 @@ async function main() {
   console.log("basket", basket);
   let productsList = Object.keys(basket);
 
-/*********** Les possibilités d'accès aux données */
+  /*********** Les possibilités d'accès aux données */
   console.log("productsList", productsList);
   console.log("Object.keys(basket)", Object.keys(basket));
   console.log("Object.values(basket)", Object.values(basket));
   console.log("object(basket)", Object(basket));
   console.log("object.entries(basket)", Object.entries(basket));
   console.log("localStorage", localStorage);
-/********************************************** */
+  /********************************************** */
 
   let infos = await getAllProductsInfo(productsList);
 
-/********************************************** */
+  /********************************************** */
   console.log("infos", infos);
   console.log("productsList", productsList);
-/********************************************** */
+  /********************************************** */
 
   await displayProductsToPage(infos, basket);
   addTotalToPage(infos, basket);
@@ -88,7 +88,7 @@ function updateQuantity(infos, basket) {
         (item) => item.color === colorMyArticle
       );
       // validation de la quantité
-if (isQtyInvalid(choiceQty, colorMyArticle, item)) return;
+      if (isQtyInvalid(choiceQty, colorMyArticle, item)) return;
 
       if (colorIndex !== -1) {
         //si la couleur est présente
@@ -104,9 +104,12 @@ if (isQtyInvalid(choiceQty, colorMyArticle, item)) return;
   });
 }
 
-function isQtyInvalid(choiceQty) {//(choiceQty) != Number.isInteger(choiceQty)
-  if (choiceQty == null || choiceQty <= 0 || choiceQty >= 100 ) {
-    alert("La quantité d'un article choisi doit être comprise entre 1 et 100 et être un nombre entier.");    
+function isQtyInvalid(choiceQty) {
+  //(choiceQty) != Number.isInteger(choiceQty)
+  if (choiceQty == null || choiceQty <= 0 || choiceQty >= 100) {
+    alert(
+      "La quantité d'un article choisi doit être comprise entre 1 et 100 et être un nombre entier."
+    );
     return true; // pour rester sur la page = stop
   }
 }
@@ -160,7 +163,9 @@ function basketEmptyMessage(basket) {
   if (Object.keys(basket) === null || Object.keys(basket).length === 0) {
     console.log("vide");
     localStorage.clear();
-    alert("Votre panier est vide ! Vous allez être redirigé sur la page d'Accueil...");
+    alert(
+      "Votre panier est vide ! Vous allez être redirigé sur la page d'Accueil..."
+    );
     window.location.href = "index.html";
   }
 }
@@ -274,11 +279,14 @@ function submitForm(basket, infos, productsList) {
   //Ecoute du bouton Commander
   boutonCommander.addEventListener("click", (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
-    if (productsList.length === 0) alert("Veuillez ajouter des articles à votre panier avant de remplir le formulaire.");
+    if (productsList.length === 0)
+      alert(
+        "Veuillez ajouter des articles à votre panier avant de remplir le formulaire."
+      );
 
     const form = document.querySelector(".cart__order__form");
-    console.log(form.elements, form);
 
+    console.log(form.elements, form);
     console.log(Object.keys(basket), "=", productsList);
 
     //Récupération des id des produits du panier, dans le localStorage
@@ -290,11 +298,11 @@ function submitForm(basket, infos, productsList) {
 
     // Validation des champs du formulaire
     if (isFormInvalid()) return;
-    if (emailInvalid()) return;
     if (firstNameInvalid()) return;
     if (lastNameInvalid()) return;
     if (addressInvalid()) return;
     if (cityInvalid()) return;
+    if (emailInvalid()) return;
 
     // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
@@ -309,8 +317,7 @@ function submitForm(basket, infos, productsList) {
     };
     console.log("order", order);
 
-
-   /// if (emailInvalid(form, order)) return;
+    /// if (emailInvalid(form, order)) return;
 
     // Méthode d'envoi des données
     const options = {
@@ -330,7 +337,7 @@ function submitForm(basket, infos, productsList) {
         console.log(form.elements.firstName);
         console.log(form.elements.firstName.value);
         // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
-       document.location.href = `confirmation.html?orderId=${data.orderId}`;
+        document.location.href = `confirmation.html?orderId=${data.orderId}`;
       })
       .catch((err) => {
         console.log("Erreur Fetch product.js", err);
@@ -338,7 +345,6 @@ function submitForm(basket, infos, productsList) {
       });
   });
 }
-
 
 function isFormInvalid() {
   const form = document.querySelector(".cart__order__form");
@@ -352,12 +358,58 @@ function isFormInvalid() {
   });
 }
 
+function firstNameInvalid() {
+  const firstName = document.querySelector("#firstName").value;
+  const regexFName =
+    /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
+  if (regexFName.test(firstName) === false) {
+    firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
+    return true;
+  }
+  return false;
+}
+
+function lastNameInvalid() {
+  const lastName = document.querySelector("#lastName").value;
+  const regexLName =
+    /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
+  if (regexLName.test(lastName) === false) {
+    lastNameErrorMsg.textContent = "Veuillez renseigner un nom valide !";
+    return true;
+  }
+  return false;
+}
+
+function addressInvalid() {
+  const address = document.querySelector("#address").value;
+  //const regexAdd = /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ,.'-]+)+/
+   const regexAdd = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/; 
+  if (regexAdd.test(address) === false) {
+    addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
+    return true;
+  }
+  return false;
+}
+
+function cityInvalid() {
+  const city = document.querySelector("#city").value;
+  //let regex = // /^[[:alpha:]]([-' ]?[[:alpha:]])*$/
+  const regexCity =
+    /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
+  if (regexCity.test(city) === false) {
+    cityErrorMsg.textContent = "Veuillez saisir un nom de ville valide !";
+    return true;
+  }
+  return false;
+}
+
 function emailInvalid() {
-    const email = document.querySelector("#email").value
-    let regex = /^[^. ?!:;,/\\/_-]([._-]?[a-z0-9])+[^.?!: ;,/\\/_-][@][a-z0-9]+[.][a-z][a-z]+$/
-    if (regex.test(email) === false) {
-      emailErrorMsg.textContent = "Veuillez saisir une adresse email valide !";
-      /************** test couleur  **********/
+  const email = document.querySelector("#email").value;
+  const regexEmail =
+    /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/;
+  if (regexEmail.test(email) === false) {
+    emailErrorMsg.textContent = "Veuillez saisir une adresse email valide !";
+    /************** test couleur  **********/
     //   (form.elements.email).style.border = "2px solid red";
     //  // form.elements.email.css('border-color', "2px solid #cc3333");
     //   //form.elements.email.css('border-color', 'none !important');
@@ -366,49 +418,8 @@ function emailInvalid() {
     //     //(form.elements.email).css('border-color', 'none !important')
     //     (form.elements.email).style.border = "none !important"
     //   }, 3000)
-      /********************** */
-      return true
-    }
-    return false
-}
-
-function firstNameInvalid() {
-  const firstName = document.querySelector("#firstName").value
-    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
-  if (regex.test(firstName) === false) {
-       // alert("Merci d'entrer un prénom valide")
-       firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
-        return true
-    }
-    return
-}
-
-function lastNameInvalid() {
-  const lastName = document.querySelector("#lastName").value
-    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
-  if (regex.test(lastName) === false) {
-        lastNameErrorMsg.textContent = "Veuillez renseigner un nom valide !";
-        return true
-    }
-    return
-}
-
-function addressInvalid() {
-const address = document.querySelector("#address").value
-    const regex = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/
-  if (regex.test(address) === false) {
-      addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
-        return true
-    }
-    return
-}
-
-function cityInvalid() {
-const city = document.querySelector("#city").value
-    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
-  if (regex.test(city) === false) {
-        cityErrorMsg.textContent = "Veuillez saisir un nom de ville valide !";
-        return true
-    }
-    return
+    /********************** */
+    return true;
+  }
+  return false;
 }
