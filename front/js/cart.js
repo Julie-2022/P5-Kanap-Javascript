@@ -17,45 +17,30 @@ async function main() {
   console.log("basket", basket);
   let productsList = Object.keys(basket);
 
+/*********** Les possibilités d'accès aux données */
   console.log("productsList", productsList);
   console.log("Object.keys(basket)", Object.keys(basket));
   console.log("Object.values(basket)", Object.values(basket));
   console.log("object(basket)", Object(basket));
   console.log("object.entries(basket)", Object.entries(basket));
   console.log("localStorage", localStorage);
+/********************************************** */
 
   let infos = await getAllProductsInfo(productsList);
 
+/********************************************** */
   console.log("infos", infos);
   console.log("productsList", productsList);
+/********************************************** */
 
-  await addProductsToPage(infos, basket);
-  //errorQuantityMessage(basket, infos) /************** doute ****** */
-  // if (isOrderInvalid(infos, basket)) return;
+  await displayProductsToPage(infos, basket);
   addTotalToPage(infos, basket);
   addTotalQuantity(infos, basket);
-  updatePriceAndQuantity(infos, basket);
+  updateQuantity(infos, basket);
   deleteProduct(basket, infos);
-  /******************** */
-  //  if (IsFormInvalid(basket, infos, productsList)) return
   submitForm(basket, infos, productsList);
-  //   document.getElementById("order").addEventListener('click', async function(e) {
-  //     e.preventDefault();
-  //     // 1. appel la fonction: Confirm et attend sont résultat grace au mot clés await
-  //     await Confirm(basket, infos, productsList);
-
-  // })
-
-  // 2. appel la fonction: RegisterforConfirming et attend la fin de sont traitement grace au mot clés await
-  //await RegisterforConfirming(basket, infos, productsList);
-
-  //  const orderButton = document.querySelector("#order")
-  //  orderButton.addEventListener("click", (e) => submitForm(e, basket, infos, productsList))
 }
 main();
-
-// const orderButton = document.querySelector("#order")
-// orderButton.addEventListener("click", (e) => submitForm(e))
 
 async function addTotalQuantity(infos, basket) {
   totalQty = 0;
@@ -83,7 +68,7 @@ async function addTotalToPage(infos, basket) {
 
 /*************************** */
 
-function updatePriceAndQuantity(infos, basket) {
+function updateQuantity(infos, basket) {
   //for (let elem of Object.keys(basket)) {
   let changeInputs = document.getElementsByClassName("itemQuantity");
   //console.log(changeInputs);
@@ -102,6 +87,7 @@ function updatePriceAndQuantity(infos, basket) {
       const colorIndex = basket[idMyArticle]?.findIndex(
         (item) => item.color === colorMyArticle
       );
+      // validation de la quantité
 if (isQtyInvalid(choiceQty, colorMyArticle, item)) return;
 
       if (colorIndex !== -1) {
@@ -111,10 +97,9 @@ if (isQtyInvalid(choiceQty, colorMyArticle, item)) return;
         alert("La quantité de votre panier à été modifée");
       }
       localStorage.setItem("basket", JSON.stringify(basket));
-//isQtyInvalid(basket, infos, choiceQty, colorMyArticle)
+
       addTotalToPage(infos, basket);
       addTotalQuantity(infos, basket);
-      // errorQuantityMessage(basket, infos)
     });
   });
 }
@@ -187,7 +172,7 @@ function deleteArticleFromPage(idThisArticle, colorThisArticle) {
   articleToDelete.remove();
 }
 
-async function addProductsToPage(infos, basket) {
+async function displayProductsToPage(infos, basket) {
   for (let elem of Object.keys(basket)) {
     let elemInfos = await infos.find((el) => el._id === elem);
     for (let color of basket[elem]) {
@@ -267,7 +252,7 @@ async function addProductsToPage(infos, basket) {
   }
 }
 
-/******************** Formulaire */
+/******************** Formulaire *****************************/
 /**
  *
  * Expects request to contain:
@@ -283,74 +268,6 @@ async function addProductsToPage(infos, basket) {
  */
 /******************* Formulaire ********* */
 
-function isFormInvalid() {
-  const form = document.querySelector(".cart__order__form");
-  const inputs = form.querySelectorAll("input");
-  inputs.forEach((input) => {
-    if (input.value === "") {
-      alert("Merci de remplir tous les champs du formulaire");
-      return true;
-    }
-    return false;
-  });
-}
-
-function emailInvalid() {
-    const email = document.querySelector("#email").value
-    let regex = /^[^. ?!:;,/\\/_-]([._-]?[a-z0-9])+[^.?!: ;,/\\/_-][@][a-z0-9]+[.][a-z][a-z]+$/
-  if (regex.test(email) === false) {
-        //alert("Merci d'entrer un email valide")
-        emailErrorMsg.textContent = "Veuillez saisir une adresse email valide !";
-        return true
-    }
-    return false
-}
-
-function firstNameInvalid() {
-  const firstName = document.querySelector("#firstName").value
-    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
-  if (regex.test(firstName) === false) {
-       // alert("Merci d'entrer un prénom valide")
-       firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
-        return true
-    }
-    return
-}
-
-function lastNameInvalid() {
-  const lastName = document.querySelector("#lastName").value
-    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
-  if (regex.test(lastName) === false) {
-        //alert("Merci d'entrer un nom valide")
-        lastNameErrorMsg.textContent = "Veuillez renseigner un nom valide !";
-        return true
-    }
-    return
-}
-
-function addressInvalid() {
-const address = document.querySelector("#address").value
-    const regex = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/
-  if (regex.test(address) === false) {
-      //alert("Merci d'entrer une adresse valide")
-      addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
-        return true
-    }
-    return
-}
-
-function cityInvalid() {
-const city = document.querySelector("#city").value
-    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
-  if (regex.test(city) === false) {
-        //alert("Merci d'entrer un nom de ville valide")
-        addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
-        return true
-    }
-    return
-}
-
-
 const boutonCommander = document.getElementById("order");
 
 function submitForm(basket, infos, productsList) {
@@ -358,11 +275,6 @@ function submitForm(basket, infos, productsList) {
   boutonCommander.addEventListener("click", (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
     if (productsList.length === 0) alert("Veuillez ajouter des articles à votre panier avant de remplir le formulaire.");
-
-    // if (productsList.length === 0) {
-    //     alert("Merci d'ajouter des articles à votre panier")
-    //     return
-    // }
 
     const form = document.querySelector(".cart__order__form");
     console.log(form.elements, form);
@@ -376,6 +288,7 @@ function submitForm(basket, infos, productsList) {
     }
     console.log("idProducts", idProducts);
 
+    // Validation des champs du formulaire
     if (isFormInvalid()) return;
     if (emailInvalid()) return;
     if (firstNameInvalid()) return;
@@ -395,8 +308,11 @@ function submitForm(basket, infos, productsList) {
       products: idProducts,
     };
     console.log("order", order);
-    // Méthode d'envoi des données
 
+
+   /// if (emailInvalid(form, order)) return;
+
+    // Méthode d'envoi des données
     const options = {
       method: "POST",
       headers: {
@@ -414,11 +330,85 @@ function submitForm(basket, infos, productsList) {
         console.log(form.elements.firstName);
         console.log(form.elements.firstName.value);
         // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
-       document.location.href = `confirmation.html?orderId=${data.orderId}`;
+    ///   document.location.href = `confirmation.html?orderId=${data.orderId}`;
       })
       .catch((err) => {
         console.log("Erreur Fetch product.js", err);
         alert("Un problème a été rencontré lors de l'envoi du formulaire.");
       });
   });
+}
+
+
+function isFormInvalid() {
+  const form = document.querySelector(".cart__order__form");
+  const inputs = form.querySelectorAll("input");
+  inputs.forEach((input) => {
+    if (input.value === "") {
+      alert("Merci de remplir tous les champs du formulaire");
+      return true;
+    }
+    return false;
+  });
+}
+
+function emailInvalid() {
+    const email = document.querySelector("#email").value
+    let regex = /^[^. ?!:;,/\\/_-]([._-]?[a-z0-9])+[^.?!: ;,/\\/_-][@][a-z0-9]+[.][a-z][a-z]+$/
+    if (regex.test(email) === false) {
+      emailErrorMsg.textContent = "Veuillez saisir une adresse email valide !";
+      /************** test couleur  **********/
+    //   (form.elements.email).style.border = "2px solid red";
+    //  // form.elements.email.css('border-color', "2px solid #cc3333");
+    //   //form.elements.email.css('border-color', 'none !important');
+    //   //form.elements.email.value.style.border = "2px solid red";
+    //   setTimeout(function(form, order, email) {
+    //     //(form.elements.email).css('border-color', 'none !important')
+    //     (form.elements.email).style.border = "none !important"
+    //   }, 3000)
+      /********************** */
+      return true
+    }
+    return false
+}
+
+function firstNameInvalid() {
+  const firstName = document.querySelector("#firstName").value
+    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
+  if (regex.test(firstName) === false) {
+       // alert("Merci d'entrer un prénom valide")
+       firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
+        return true
+    }
+    return
+}
+
+function lastNameInvalid() {
+  const lastName = document.querySelector("#lastName").value
+    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
+  if (regex.test(lastName) === false) {
+        lastNameErrorMsg.textContent = "Veuillez renseigner un nom valide !";
+        return true
+    }
+    return
+}
+
+function addressInvalid() {
+const address = document.querySelector("#address").value
+    const regex = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/
+  if (regex.test(address) === false) {
+      addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
+        return true
+    }
+    return
+}
+
+function cityInvalid() {
+const city = document.querySelector("#city").value
+    const regex = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/
+  if (regex.test(city) === false) {
+        cityErrorMsg.textContent = "Veuillez saisir un nom de ville valide !";
+        return true
+    }
+    return
 }
