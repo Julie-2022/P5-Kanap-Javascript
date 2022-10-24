@@ -1,11 +1,11 @@
-async function getAllProductsInfo(productsList) {
+console.log("Arrivée sur la page panier")
+async function getAllProductsInfo(productsIdList) {
   let result = [];
-  for (let product of productsList) {
+  for (let product of productsIdList) {
     await fetch(`http://localhost:3000/api/products/${product}`)
       .then((res) => res.json())
       .then((info) => {
         result.push(info);
-        console.log("result", result);
         console.log("info", info);
       });
   }
@@ -13,24 +13,24 @@ async function getAllProductsInfo(productsList) {
 }
 
 async function main() {
+  //Réupération de l'id des produits dans le localStorage
   let basket = JSON.parse(localStorage.getItem("basket")) || {};
-  console.log("basket", basket);
-  let productsList = Object.keys(basket);
+  console.table("basket", basket);
+  let productsIdList = Object.keys(basket);
 
   /*********** Les possibilités d'accès aux données */
-  console.log("productsList", productsList);
+  console.log("productsIdList", productsIdList);
   console.log("Object.keys(basket)", Object.keys(basket));
-  console.log("Object.values(basket)", Object.values(basket));
-  console.log("object(basket)", Object(basket));
-  console.log("object.entries(basket)", Object.entries(basket));
-  console.log("localStorage", localStorage);
+  // console.log("Object.values(basket)", Object.values(basket));
+  // console.log("object(basket)", Object(basket));
+  // console.log("object.entries(basket)", Object.entries(basket));
+  // console.log("localStorage", localStorage);
   /********************************************** */
 
-  let infos = await getAllProductsInfo(productsList);
+  let infos = await getAllProductsInfo(productsIdList);
 
   /********************** données ********************* */
-  console.log("infos", infos);
-  console.log("productsList", productsList);
+  console.table("infos de l'API", infos);
   /********************************************** */
 
   await displayProductsToPage(infos, basket);
@@ -38,7 +38,7 @@ async function main() {
   addTotalQuantity(infos, basket);
   updateQuantity(infos, basket);
   deleteProduct(basket, infos);
-  submitForm(basket, infos, productsList);
+  submitForm(basket, infos, productsIdList);
 }
 main();
 
@@ -75,8 +75,9 @@ function updateQuantity(infos, basket) {
   Array.from(changeInputs).forEach((item) => {
     item.addEventListener("change", (event) => {
       event.preventDefault();
-      console.log(item);
+      //console.log(item, event);
       choiceQty = Number(event.target.value);
+      console.log(event.target.value)
 
       // On pointe le parent hiérarchique <article> de l'input "itemQuantity"
       let myArticle = event.target.closest("article");
@@ -120,7 +121,7 @@ function deleteProduct(basket, infos) {
     btnDelete.addEventListener("click", (e) => {
       e.preventDefault();
       console.log("e", e);
-
+      // sélectioner ou cibler l'élément parent le plus proche de "e"
       let thisArticle = e.target.closest("article");
       const colorThisArticle = thisArticle.getAttribute("data-color");
       const idThisArticle = thisArticle.getAttribute("data-id");
@@ -132,13 +133,11 @@ function deleteProduct(basket, infos) {
       );
 
       basket[idThisArticle].splice(IndexToDelete, 1);
-      console.log(IndexToDelete !== -1);
+      console.log(IndexToDelete !== -1); // return true ou false si la couleur est stockée ou pas
       console.log("basket1", basket);
 
       localStorage.setItem("basket", JSON.stringify(basket));
-      console.log(IndexToDelete !== -1);
 
-      console.log(basket[idThisArticle] <= 1);
       /***** */
       deleteArticleFromPage(idThisArticle, colorThisArticle);
       deleteProductEmptyFromBasket(basket, idThisArticle);
@@ -150,10 +149,11 @@ function deleteProduct(basket, infos) {
 }
 
 function deleteProductEmptyFromBasket(basket, idThisArticle) {
-  if (basket[idThisArticle] <= 1) {
-    console.log("jusque là tout va bien", basket[idThisArticle] <= 1);
+  // Supprimer un article complètement du localStorage
+  if (basket[idThisArticle] <= 1) { // renvoie true si il n'y a plus qu'un seul article de cet id dans le panier
+    console.log("dernier article du panier", basket[idThisArticle] <= 1);
     delete basket[idThisArticle];
-    console.log("basket3", basket);
+    console.log("basket2", basket); // objet vide
     localStorage.setItem("basket", JSON.stringify(basket));
   }
 }
@@ -182,43 +182,55 @@ async function displayProductsToPage(infos, basket) {
     for (let color of basket[elem]) {
       // chercher dans le panier, la quantité et couleur commandées
       let displayArticle = document.querySelector("#cart__items");
+
       let article = document.createElement("article");
       article.classList.add("cart__item");
       article.dataset.id = elem; // au lieu de : elemInfos.id;
       article.dataset.color = color.color; // au lieu de : elemInfos.color;
       displayArticle.appendChild(article);
+
       let div = document.createElement("div");
       div.classList.add("cart__item__img");
       article.appendChild(div);
+
       let image = document.createElement("img");
       image.classList.add("cart__item__img");
       image.src = elemInfos.imageUrl;
       image.alt = elemInfos.altTxt;
       div.appendChild(image);
+
       let div2 = document.createElement("div");
       div2.classList.add("cart__item__content");
       article.appendChild(div2);
+
       let div3 = document.createElement("div");
       div3.classList.add("cart__item__content__description");
       div2.appendChild(div3);
+
       let kanapName = document.createElement("h2");
       kanapName.innerText = elemInfos.name;
       div3.appendChild(kanapName);
+
       let kanapColor = document.createElement("p");
       kanapColor.innerText = color.color;
       div3.appendChild(kanapColor);
+
       let KanapPrice = document.createElement("p");
       KanapPrice.innerText = elemInfos.price + " €";
       div3.appendChild(KanapPrice);
+
       let div4 = document.createElement("div");
       div4.classList.add("cart__item__content__settings");
       div2.appendChild(div4);
+
       let DivQuantity = document.createElement("div");
       DivQuantity.classList.add("cart__item__content__settings__quantity");
       div4.appendChild(DivQuantity);
+
       let p = document.createElement("p");
       p.innerText = "Qté : ";
       DivQuantity.appendChild(p);
+
       let input = document.createElement("input");
       input.type = "number";
       input.classList.add("itemQuantity");
@@ -226,12 +238,12 @@ async function displayProductsToPage(infos, basket) {
       input.min = "1";
       input.max = "100";
       input.value = color.quantity;
-
       DivQuantity.appendChild(input);
+
       let div6 = document.createElement("div");
       div6.classList.add("cart__item__content__settings__delete");
-
       div4.appendChild(div6);
+
       let deleteP = document.createElement("p");
       deleteP.classList.add("deleteItem");
       deleteP.textContent = "Supprimer";
@@ -258,11 +270,11 @@ async function displayProductsToPage(infos, basket) {
 
 const boutonCommander = document.getElementById("order");
 
-function submitForm(basket, infos, productsList) {
+function submitForm(basket, infos, productsIdList) {
   //Ecoute du bouton Commander
   boutonCommander.addEventListener("click", (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
-    if (productsList.length === 0)
+    if (productsIdList.length === 0)
       alert(
         "Veuillez ajouter des articles à votre panier avant de remplir le formulaire."
       );
@@ -270,14 +282,14 @@ function submitForm(basket, infos, productsList) {
     const form = document.querySelector(".cart__order__form");
 
     console.log(form.elements, form);
-    console.log(Object.keys(basket), "=", productsList);
+    console.log(Object.keys(basket), "=", productsIdList);
 
     //Récupération des id des produits du panier, dans le localStorage
     let idProducts = [];
-    for (let l = 0; l < productsList.length; l++) {
-      idProducts.push(productsList[l]);
+    for (let i = 0; i < productsIdList.length; i++) {
+      idProducts.push(productsIdList[i]);
+      console.log("idProducts", idProducts);
     }
-    console.log("idProducts", idProducts);
 
     // Validation des champs du formulaire
     if (formInvalid()) return;
@@ -318,7 +330,7 @@ function submitForm(basket, infos, productsList) {
         console.log(form.elements.firstName);
         console.log(form.elements.firstName.value);
         // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
-        document.location.href = `confirmation.html?orderId=${data.orderId}`;
+        ///document.location.href = `confirmation.html?orderId=${data.orderId}`;
       })
       .catch((err) => {
         console.log("Erreur Fetch product.js", err);
