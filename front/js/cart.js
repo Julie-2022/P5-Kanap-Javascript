@@ -28,7 +28,7 @@ async function main() {
 
   let infos = await getAllProductsInfo(productsList);
 
-  /********************************************** */
+  /********************** données ********************* */
   console.log("infos", infos);
   console.log("productsList", productsList);
   /********************************************** */
@@ -159,7 +159,6 @@ function deleteProductEmptyFromBasket(basket, idThisArticle) {
 }
 
 function basketEmptyMessage(basket) {
-  //if (basket == {} || basket === null || basket.length === 0)
   if (Object.keys(basket) === null || Object.keys(basket).length === 0) {
     console.log("vide");
     localStorage.clear();
@@ -297,7 +296,7 @@ function submitForm(basket, infos, productsList) {
     console.log("idProducts", idProducts);
 
     // Validation des champs du formulaire
-    if (isFormInvalid()) return;
+    if (formInvalid()) return;
     if (firstNameInvalid()) return;
     if (lastNameInvalid()) return;
     if (addressInvalid()) return;
@@ -307,15 +306,15 @@ function submitForm(basket, infos, productsList) {
     // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
       contact: {
-        firstName: form.elements.firstName.value, //inputFirstName.value,
-        lastName: form.elements.lastName.value, //inputLastName.value,
-        address: form.elements.address.value, //inputAddress.value,
-        city: form.elements.city.value, //inputCity.value,
-        email: form.elements.email.value, //inputEmail.value,
+        firstName: form.elements.firstName.value, 
+        lastName: form.elements.lastName.value,
+        address: form.elements.address.value,
+        city: form.elements.city.value,
+        email: form.elements.email.value,
       },
       products: idProducts,
     };
-    console.log("order", order);
+    console.log("order :", order);
 
     /// if (emailInvalid(form, order)) return;
 
@@ -328,7 +327,7 @@ function submitForm(basket, infos, productsList) {
       },
       body: JSON.stringify(order),
     };
-    console.log("options", options);
+    console.log("options à envoyer :", options);
     // On envoie les données du contact et l'id des produits à l'API
     fetch("http://localhost:3000/api/products/order", options)
       .then((response) => response.json())
@@ -346,7 +345,7 @@ function submitForm(basket, infos, productsList) {
   });
 }
 
-function isFormInvalid() {
+function formInvalid() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
   inputs.forEach((input) => {

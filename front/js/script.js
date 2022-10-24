@@ -113,9 +113,10 @@ kanapsDisplay()
 function displayError() {
 
     const articleError = document.createElement("article");
-    articleError.innerHTML = "Il n'y a aucun article disponible à ce jour.<br>Merci de réessayer ultérieurement.";
+    articleError.innerHTML = "Il n'y a aucun article disponible à ce jour.<br>Merci de réessayer ultérieurement.<br>Si ce problème persiste, n'hésitez pas à nous contacter.";
     articleError.style.paddingBottom = "25px";
-    articleError.style.textAlign= "center";
+    articleError.style.textAlign = "center";
+    articleError.style.lineHeight = "200%";
     const Parent = document.getElementById("items");
     Parent.appendChild(articleError);
 }

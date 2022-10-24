@@ -2,28 +2,33 @@
 (async function () {
   // Récupérer l'id du kanap dans une url
   const productId = getProductId();
-  //console.log(productId) //= vérif 1
+  console.log("productId :", productId); //= vérif 1
   // fetch notre kanap
   const product = await getProduct(productId);
-  //console.log(product)// vérif 2 si on l'a bien récup
+  console.log(product); // vérif 2 si on l'a bien récup
   // complète les infos du kanap clické
-  productsData(product);
+  productPage(product);
 })();
-// Fct qui permet de récupérer l'id via la console par l'objet "location" puis "location.href" puis "location.href" puis "new URL(location.href)" puis "new URL(location.href).get("id") => donne l'id.
+// Fct qui permet de récupérer l'id via la console par l'objet "location" puis "location.href" puis "new URL(location.href)" puis "new URL(location.href).search" puis "new URL(location.href).searchParams.get("id") => qui donne juste l'id.
 function getProductId() {
   return new URL(location.href).searchParams.get("id");
 }
+
 // Copie de getKanap + concaténation "productId"
 async function getProduct(productId) {
   try {
     const res = await fetch(`http://localhost:3000/api/products/${productId}`);
-    const products = await res.json();
-    return products;
+    const productDatas = await res.json();
+    console.log(productDatas); // vérif récup des données de l'article
+    return productDatas;
   } catch (error) {
-    alert(error);
+    alert("Oups! Une erreur s'est produite, lors du chargement de la page. Vous allez être redirigé sur la page d'Accueil..."
+    );
+    window.location.href = "index.html";
   }
 }
-function productsData(product) {
+
+function productPage(product) {
   // = tout ce qui est à l'interieur du fetch
   const altTxt = product.altTxt;
   const colors = product.colors;
@@ -32,9 +37,9 @@ function productsData(product) {
   const name = product.name;
   const price = product.price;
   const _id = product._id;
-  // Plus élégant: const { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
+  // Plus élégant, destructuring : const { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
   //
- 
+
   makePageTitle(name);
   makeImage(imageUrl, altTxt);
   makeTitle(name);
@@ -100,9 +105,10 @@ function saveBasket(colorsOption, numberSelect) {
   const colorIndex = basket[productId]?.findIndex(
     (item) => item.color === colorsOption
   );
-  console.log(colorIndex !== -1);  // return true ou false si la couleur est stockée ou pas
+  console.log(colorIndex !== -1); // return true ou false si la couleur est stockée ou pas
   if (basket[productId]) {
-    if (colorIndex !== -1) { //si la couleur est présente
+    if (colorIndex !== -1) {
+      //si la couleur est présente
       // === colorOption // != -1 : (-1) : couleur non stockée
       basket[productId][colorIndex].quantity =
         parseInt(basket[productId][colorIndex].quantity) +
@@ -122,8 +128,16 @@ function saveBasket(colorsOption, numberSelect) {
 // if (colorIndex != -1) {...}
 
 function isOrderInvalid(colorsOption, numberSelect) {
-  if (colorsOption == null || colorsOption === "" || numberSelect == null || numberSelect <= 0 || numberSelect >= 100) {
-    alert("Avant d'ajouter un canapé à votre panier, veuillez sélectionner la couleur souhaitée ainsi qu'une quantité ne pouvant excéder 100.");
+  if (
+    colorsOption == null ||
+    colorsOption === "" ||
+    numberSelect == null ||
+    numberSelect <= 0 ||
+    numberSelect >= 100
+  ) {
+    alert(
+      "Avant d'ajouter un canapé à votre panier, veuillez sélectionner la couleur souhaitée ainsi qu'une quantité ne pouvant excéder 100."
+    );
     return true; // pour rester sur la page = stop
   }
 }
