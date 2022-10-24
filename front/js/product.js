@@ -37,7 +37,7 @@ function productPage(product) {
   const name = product.name;
   const price = product.price;
   const _id = product._id;
-  // Plus élégant, destructuring : const { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
+  // Plus élégant, le destructuring : const { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
   //
 
   makePageTitle(name);

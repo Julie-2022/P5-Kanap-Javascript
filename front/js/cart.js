@@ -225,33 +225,17 @@ async function displayProductsToPage(infos, basket) {
       input.name = "itemQuantity";
       input.min = "1";
       input.max = "100";
-      input.value = color.quantity; //|| newValue;
+      input.value = color.quantity;
 
       DivQuantity.appendChild(input);
       let div6 = document.createElement("div");
       div6.classList.add("cart__item__content__settings__delete");
-      //div6.addEventListener("click", () => deleteProduct(basket, infos, elem, color.color))
 
       div4.appendChild(div6);
       let deleteP = document.createElement("p");
       deleteP.classList.add("deleteItem");
       deleteP.textContent = "Supprimer";
       div6.appendChild(deleteP);
-      /****************** Change Qty *************** */
-      // input.addEventListener("change", (event) => {
-      //  // console.log(event);
-      //   let currentQuantity = color.quantity;
-      //  // console.log(currentQuantity);
-      //   const newValue = Number(input.value);
-      //   const updateQuantity = parseInt((currentQuantity = newValue));
-      //  // console.log(updateQuantity);
-      //   color.quantity = updateQuantity;
-      //  // console.table(basket);
-      //   localStorage.setItem("basket", JSON.stringify(basket));
-      //   alert("La quantité de votre panier à été modifée");
-      //   addTotalQuantity(infos, basket);
-      //   addTotalToPage(infos, basket);
-      // });
     }
   }
 }
@@ -315,8 +299,6 @@ function submitForm(basket, infos, productsList) {
       products: idProducts,
     };
     console.log("order :", order);
-
-    /// if (emailInvalid(form, order)) return;
 
     // Méthode d'envoi des données
     const options = {
