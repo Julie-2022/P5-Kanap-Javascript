@@ -1,4 +1,4 @@
-console.log("Arrivée sur la page panier")
+console.log("Arrivée sur la page panier");
 async function getAllProductsInfo(productsIdList) {
   let result = [];
   for (let product of productsIdList) {
@@ -12,27 +12,27 @@ async function getAllProductsInfo(productsIdList) {
   return result;
 }
 
-/****************** Fonction pincipale d'affichage de la page panier ***************/
+/*************** Fonction principale d'affichage de la page panier ***************/
 async function main() {
-  // Réupération de l'id des produits dans le localStorage
+  // Récupération de l'id des produits dans le localStorage
   let basket = JSON.parse(localStorage.getItem("basket")) || {};
   console.table("basket", basket);
   let productsIdList = Object.keys(basket);
 
-  /*********** Les possibilités d'accès aux données */
+  /*============= Les possibilités d'accès aux données ==========*/
   console.log("productsIdList", productsIdList);
   console.log("Object.keys(basket)", Object.keys(basket));
   // console.log("Object.values(basket)", Object.values(basket));
   // console.log("object(basket)", Object(basket));
   // console.log("object.entries(basket)", Object.entries(basket));
   // console.log("localStorage", localStorage);
-  /********************************************** */
+  /*============================================================*/
 
   let infos = await getAllProductsInfo(productsIdList);
 
-  /********************** données ********************* */
+  /*======================= données de l'API ===================*/
   console.table("infos de l'API", infos);
-  /********************************************** */
+  /*============================================================*/
 
   await displayProductsToPage(infos, basket);
   addTotalToPage(infos, basket);
@@ -77,20 +77,17 @@ function updateQuantity(infos, basket) {
       event.preventDefault();
       //console.log(item, event);
       choiceQty = Number(event.target.value);
-      console.log(event.target.value)
-
+      console.log(event.target.value);
       // On pointe le parent hiérarchique <article> de l'input "itemQuantity"
       let myArticle = event.target.closest("article");
       let colorMyArticle = myArticle.getAttribute("data-color");
       let idMyArticle = myArticle.getAttribute("data-id");
-
       // On récupère dans le localStorage l'élément (même id et même couleur) dont on veut modifier la quantité
       const colorIndex = basket[idMyArticle]?.findIndex(
         (item) => item.color === colorMyArticle
       );
       // validation de la quantité
       if (isQtyInvalid(choiceQty, colorMyArticle, item)) return;
-
       if (colorIndex !== -1) {
         //si la couleur est présente
         // === colorMyArticle // != -1 : (-1) : couleur non stockée
@@ -106,7 +103,6 @@ function updateQuantity(infos, basket) {
 }
 
 function isQtyInvalid(choiceQty) {
-  //(choiceQty) != Number.isInteger(choiceQty)
   if (choiceQty == null || choiceQty <= 0 || choiceQty >= 100) {
     alert(
       "La quantité d'un article choisi doit être comprise entre 1 et 100 et être un nombre entier."
@@ -128,7 +124,6 @@ function deleteProduct(basket, infos) {
       const idThisArticle = thisArticle.getAttribute("data-id");
       console.log(thisArticle);
       console.log(idThisArticle, colorThisArticle);
-
       // création d'indexToDelete pour trouver l'article à supprimer dans le localStorage en fonction de sa couleur
       const IndexToDelete = basket[idThisArticle]?.findIndex(
         (x) => x.color === colorThisArticle
@@ -140,7 +135,6 @@ function deleteProduct(basket, infos) {
       // On met à jour le localStorage
       localStorage.setItem("basket", JSON.stringify(basket));
 
-      /***** */
       deleteArticleFromPage(idThisArticle, colorThisArticle);
       deleteProductEmptyFromBasket(basket, idThisArticle);
       addTotalToPage(infos, basket);
@@ -158,8 +152,9 @@ function deleteArticleFromPage(idThisArticle, colorThisArticle) {
 }
 
 function deleteProductEmptyFromBasket(basket, idThisArticle) {
-  // Supprimer un article complètement du localStorage 
-  if (basket[idThisArticle] <= 1) { // renvoie true si il n'y a plus qu'un seul article de cet id dans le panier
+  // Supprimer un article complètement du localStorage
+  if (basket[idThisArticle] <= 1) {
+    // renvoie true si il n'y a plus qu'un seul article de cet id dans le panier
     console.log("dernier article du panier", basket[idThisArticle] <= 1);
     delete basket[idThisArticle];
     console.log("basket2", basket); // objet vide
@@ -178,7 +173,7 @@ function basketEmptyMessage(basket) {
   }
 }
 
-/********************* displayProductsToPage ********************* */
+/********************* displayProductsToPage ************************ */
 async function displayProductsToPage(infos, basket) {
   for (let elem of Object.keys(basket)) {
     let elemInfos = await infos.find((el) => el._id === elem);
@@ -255,8 +250,8 @@ async function displayProductsToPage(infos, basket) {
   }
 }
 
-/**************** Données du back-end pour le Formulaire ********************/
-/**
+/*******************========> Formulaire <=======******************* */
+/** Données du back-end pour le Formulaire
  *
  * Expects request to contain:
  * contact: {
@@ -269,11 +264,10 @@ async function displayProductsToPage(infos, basket) {
  * products: [string] <-- array of product _id
  *
  */
-/*******************========> Formulaire <===========************************* */
 
 const boutonCommander = document.getElementById("order");
 
-/****************** Fonction pincipale du Formulaire *********************/
+/***************** Fonction principale du Formulaire ****************/
 function submitForm(basket, infos, productsIdList) {
   //Ecoute du bouton Commander
   boutonCommander.addEventListener("click", (event) => {
@@ -306,7 +300,7 @@ function submitForm(basket, infos, productsIdList) {
     // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
       contact: {
-        firstName: form.elements.firstName.value, 
+        firstName: form.elements.firstName.value,
         lastName: form.elements.lastName.value,
         address: form.elements.address.value,
         city: form.elements.city.value,
@@ -380,7 +374,7 @@ function lastNameInvalid() {
 function addressInvalid() {
   const address = document.querySelector("#address").value;
   //const regexAdd = /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ,.'-]+)+/
-   const regexAdd = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/; 
+  const regexAdd = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/;
   if (regexAdd.test(address) === false) {
     addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
     return true;
@@ -402,8 +396,7 @@ function cityInvalid() {
 
 function emailInvalid() {
   const email = document.querySelector("#email").value;
-  const regexEmail =
-    /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/;
+  const regexEmail = /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/;
   if (regexEmail.test(email) === false) {
     emailErrorMsg.textContent = "Veuillez saisir une adresse email valide !";
     /************** test couleur  **********/
