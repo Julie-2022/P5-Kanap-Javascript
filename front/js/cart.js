@@ -12,8 +12,9 @@ async function getAllProductsInfo(productsIdList) {
   return result;
 }
 
+/****************** Fonction pincipale d'affichage de la page panier ***************/
 async function main() {
-  //Réupération de l'id des produits dans le localStorage
+  // Réupération de l'id des produits dans le localStorage
   let basket = JSON.parse(localStorage.getItem("basket")) || {};
   console.table("basket", basket);
   let productsIdList = Object.keys(basket);
@@ -66,8 +67,7 @@ async function addTotalToPage(infos, basket) {
   totalQuantity.innerText = total;
 }
 
-/*************************** */
-
+/************* updateQuantity *************** */
 function updateQuantity(infos, basket) {
   //for (let elem of Object.keys(basket)) {
   let changeInputs = document.getElementsByClassName("itemQuantity");
@@ -115,6 +115,7 @@ function isQtyInvalid(choiceQty) {
   }
 }
 
+/************** deleteProduct ************** */
 function deleteProduct(basket, infos) {
   let deleteItem = document.querySelectorAll(".deleteItem");
   deleteItem.forEach((btnDelete) => {
@@ -128,14 +129,15 @@ function deleteProduct(basket, infos) {
       console.log(thisArticle);
       console.log(idThisArticle, colorThisArticle);
 
+      // création d'indexToDelete pour trouver l'article à supprimer dans le localStorage en fonction de sa couleur
       const IndexToDelete = basket[idThisArticle]?.findIndex(
         (x) => x.color === colorThisArticle
       );
-
+      // On le supprime
       basket[idThisArticle].splice(IndexToDelete, 1);
       console.log(IndexToDelete !== -1); // return true ou false si la couleur est stockée ou pas
       console.log("basket1", basket);
-
+      // On met à jour le localStorage
       localStorage.setItem("basket", JSON.stringify(basket));
 
       /***** */
@@ -148,8 +150,15 @@ function deleteProduct(basket, infos) {
   });
 }
 
+function deleteArticleFromPage(idThisArticle, colorThisArticle) {
+  const articleToDelete = document.querySelector(
+    `article[data-id="${idThisArticle}"][data-color="${colorThisArticle}"]`
+  );
+  articleToDelete.remove();
+}
+
 function deleteProductEmptyFromBasket(basket, idThisArticle) {
-  // Supprimer un article complètement du localStorage
+  // Supprimer un article complètement du localStorage 
   if (basket[idThisArticle] <= 1) { // renvoie true si il n'y a plus qu'un seul article de cet id dans le panier
     console.log("dernier article du panier", basket[idThisArticle] <= 1);
     delete basket[idThisArticle];
@@ -169,13 +178,7 @@ function basketEmptyMessage(basket) {
   }
 }
 
-function deleteArticleFromPage(idThisArticle, colorThisArticle) {
-  const articleToDelete = document.querySelector(
-    `article[data-id="${idThisArticle}"][data-color="${colorThisArticle}"]`
-  );
-  articleToDelete.remove();
-}
-
+/********************* displayProductsToPage ********************* */
 async function displayProductsToPage(infos, basket) {
   for (let elem of Object.keys(basket)) {
     let elemInfos = await infos.find((el) => el._id === elem);
@@ -252,7 +255,7 @@ async function displayProductsToPage(infos, basket) {
   }
 }
 
-/******************** Formulaire *****************************/
+/**************** Données du back-end pour le Formulaire ********************/
 /**
  *
  * Expects request to contain:
@@ -266,10 +269,11 @@ async function displayProductsToPage(infos, basket) {
  * products: [string] <-- array of product _id
  *
  */
-/******************* Formulaire ********* */
+/*******************========> Formulaire <===========************************* */
 
 const boutonCommander = document.getElementById("order");
 
+/****************** Fonction pincipale du Formulaire *********************/
 function submitForm(basket, infos, productsIdList) {
   //Ecoute du bouton Commander
   boutonCommander.addEventListener("click", (event) => {
@@ -330,7 +334,7 @@ function submitForm(basket, infos, productsIdList) {
         console.log(form.elements.firstName);
         console.log(form.elements.firstName.value);
         // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
-        ///document.location.href = `confirmation.html?orderId=${data.orderId}`;
+        document.location.href = `confirmation.html?orderId=${data.orderId}`;
       })
       .catch((err) => {
         console.log("Erreur Fetch product.js", err);
