@@ -303,16 +303,17 @@ function submitForm(basket, productsIdList) {
     // ) {
 
      if (
-      formInvalid() ||
-      firstNameInvalid() ||
-      lastNameInvalid() ||
-      addressInvalid() ||
-      cityInvalid() ||
-      emailInvalid()
+      formInvalid() // ||
+      // firstNameInvalid() ||
+      // lastNameInvalid() ||
+      // addressInvalid() ||
+      // cityInvalid() ||
+      // emailInvalid()
     ) {
       alert("Merci de remplir correctement tous les champs du formulaire. ");
       return;
     }
+    console.log("Invalid() :", formInvalid())
 
     // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
@@ -353,85 +354,100 @@ function submitForm(basket, productsIdList) {
       });
   });
 }
-
+/*********** Ici ça fonctionne sauf si l'input après celui qui est repéré comme faux est faux aussi, donc c'est synchrone !*/
 function formInvalid() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
-  // inputs.forEach((input) => {
   for (let input of inputs) {
     if (input.value === "") {
-      //   alert("Merci de remplir tous les champs du formulaire");
-      console.log("il y a au moins 1 input vide", input);
-      return true;
-      // } else {
+      alert("Merci de remplir tous les champs du formulaire");
+      console.log("il y a au moins 1 input vide", form.element);
+      break;
+    } else if (
+      firstNameInvalid() ||
+      lastNameInvalid() ||
+      addressInvalid() ||
+      cityInvalid() ||
+      emailInvalid()
+    ) {
+      console.log("c'est invalide !!!!")
+       return true
       }
-      //  console.log("pas d'input vide")
-    return false;
-  }
-  //});
+      console.log("c'est valide !!!!")
+    }
+    return false
 }
 
 function firstNameInvalid(input) {
   const firstName = document.querySelector("#firstName").value;
+  firstNameErrorMsg.textContent = "";
   const regexFName =
     /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
-  if (regexFName.test(firstName) === false || input.value === "") {
+  if (regexFName.test(firstName) === false) {
     firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
     return true;
   }
-  return;
+  //return false;
 }
 
 function lastNameInvalid() {
   const lastName = document.querySelector("#lastName").value;
+  lastNameErrorMsg.textContent = "";
   const regexLName =
     /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
   if (regexLName.test(lastName) === false) {
     lastNameErrorMsg.textContent = "Veuillez renseigner un nom valide !";
     return true;
   }
-  return false;
+  //return false;
 }
 
 function addressInvalid() {
   const address = document.querySelector("#address").value;
   //const regexAdd = /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ,.'-]+)+/
+
+  addressErrorMsg.textContent = "";
   const regexAdd = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/;
   if (regexAdd.test(address) === false) {
     addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
     return true;
   }
-  return false;
+  //return false;
 }
 
 function cityInvalid() {
   const city = document.querySelector("#city").value;
   //let regex = // /^[[:alpha:]]([-' ]?[[:alpha:]])*$/
+  cityErrorMsg.textContent = "";
   const regexCity =
     /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
   if (regexCity.test(city) === false) {
     cityErrorMsg.textContent = "Veuillez saisir un nom de ville valide !";
     return true;
   }
-  return false;
+  //return false;
 }
 
-function emailInvalid() {
+function emailInvalid(form, input) {
   const email = document.querySelector("#email").value;
+  emailErrorMsg.textContent = "";
   const regexEmail = /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/;
   if (regexEmail.test(email) === false) {
     emailErrorMsg.textContent = "Veuillez saisir une adresse email valide !";
-    /************** test couleur  **********/
-    //   (form.elements.email).style.border = "2px solid red";
+    return true;
+  }
+}
+
+
+
+/************** test couleur  **********/
+//(form.elements.email).style.border = "none !important";
+      // (form.elements.email).style.border = "2px solid red";
     //  // form.elements.email.css('border-color', "2px solid #cc3333");
     //   //form.elements.email.css('border-color', 'none !important');
-    //   //form.elements.email.value.style.border = "2px solid red";
+    //   input.value.style.border = "2px solid red";
     //   setTimeout(function(form, order, email) {
     //     //(form.elements.email).css('border-color', 'none !important')
     //     (form.elements.email).style.border = "none !important"
     //   }, 3000)
     /********************** */
-    return true;
-  }
-  return false;
-}
