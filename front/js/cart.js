@@ -39,7 +39,7 @@ async function main() {
   addTotalQuantity(infos, basket);
   updateQuantity(infos, basket);
   deleteProduct(basket, infos);
-  submitForm(basket, infos, productsIdList);
+  submitForm(basket, productsIdList);
 }
 main();
 
@@ -77,7 +77,7 @@ function updateQuantity(infos, basket) {
       event.preventDefault();
       //console.log(item, event);
       choiceQty = Number(event.target.value);
-      console.log(event.target.value);
+      console.log("choiceQty :", event.target.value);
       // On pointe le parent hiérarchique <article> de l'input "itemQuantity"
       let myArticle = event.target.closest("article");
       let colorMyArticle = myArticle.getAttribute("data-color");
@@ -128,10 +128,10 @@ function deleteProduct(basket, infos) {
       const IndexToDelete = basket[idThisArticle]?.findIndex(
         (x) => x.color === colorThisArticle
       );
+      console.log(IndexToDelete !== -1); // return true ou false si la couleur est stockée ou pas
       // On le supprime
       basket[idThisArticle].splice(IndexToDelete, 1);
-      console.log(IndexToDelete !== -1); // return true ou false si la couleur est stockée ou pas
-      console.log("basket1", basket);
+      console.log("basket", basket);
       // On met à jour le localStorage
       localStorage.setItem("basket", JSON.stringify(basket));
 
@@ -155,7 +155,10 @@ function deleteProductEmptyFromBasket(basket, idThisArticle) {
   // Supprimer un article complètement du localStorage
   if (basket[idThisArticle] <= 1) {
     // renvoie true si il n'y a plus qu'un seul article de cet id dans le panier
-    console.log("dernier article du panier", basket[idThisArticle] <= 1);
+    console.log(
+      "dernier article de cet id du panier",
+      basket[idThisArticle] <= 1
+    );
     delete basket[idThisArticle];
     console.log("basket2", basket); // objet vide
     localStorage.setItem("basket", JSON.stringify(basket));
@@ -173,7 +176,7 @@ function basketEmptyMessage(basket) {
   }
 }
 
-/********************* displayProductsToPage ************************ */
+/********* displayProductsToPage ************ */
 async function displayProductsToPage(infos, basket) {
   for (let elem of Object.keys(basket)) {
     let elemInfos = await infos.find((el) => el._id === elem);
@@ -268,7 +271,7 @@ async function displayProductsToPage(infos, basket) {
 const boutonCommander = document.getElementById("order");
 
 /***************** Fonction principale du Formulaire ****************/
-function submitForm(basket, infos, productsIdList) {
+function submitForm(basket, productsIdList) {
   //Ecoute du bouton Commander
   boutonCommander.addEventListener("click", (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
@@ -283,19 +286,33 @@ function submitForm(basket, infos, productsIdList) {
     console.log(Object.keys(basket), "=", productsIdList);
 
     //Récupération des id des produits du panier, dans le localStorage
-    let idProducts = [];
-    for (let i = 0; i < productsIdList.length; i++) {
-      idProducts.push(productsIdList[i]);
-      console.log("idProducts", idProducts);
-    }
+    // let idProducts = [];
+    // for (let i = 0; i < productsIdList.length; i++) {
+    //   idProducts.push(productsIdList[i]);
+    //   console.log("idProducts", idProducts);
+    // }
 
     // Validation des champs du formulaire
-    if (formInvalid()) return;
-    if (firstNameInvalid()) return;
-    if (lastNameInvalid()) return;
-    if (addressInvalid()) return;
-    if (cityInvalid()) return;
-    if (emailInvalid()) return;
+    // if (
+    //   formInvalid() ||
+    //   firstNameInvalid() ||
+    //   lastNameInvalid() ||
+    //   addressInvalid() ||
+    //   cityInvalid() ||
+    //   emailInvalid()
+    // ) {
+
+     if (
+      formInvalid() ||
+      firstNameInvalid() ||
+      lastNameInvalid() ||
+      addressInvalid() ||
+      cityInvalid() ||
+      emailInvalid()
+    ) {
+      alert("Merci de remplir correctement tous les champs du formulaire. ");
+      return;
+    }
 
     // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
@@ -306,7 +323,7 @@ function submitForm(basket, infos, productsIdList) {
         city: form.elements.city.value,
         email: form.elements.email.value,
       },
-      products: idProducts,
+      products: productsIdList, // = idProducts, = Object.keys(basket),
     };
     console.log("order :", order);
 
@@ -328,7 +345,7 @@ function submitForm(basket, infos, productsIdList) {
         console.log(form.elements.firstName);
         console.log(form.elements.firstName.value);
         // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
-        document.location.href = `confirmation.html?orderId=${data.orderId}`;
+        ///  document.location.href = `confirmation.html?orderId=${data.orderId}`;
       })
       .catch((err) => {
         console.log("Erreur Fetch product.js", err);
@@ -340,24 +357,29 @@ function submitForm(basket, infos, productsIdList) {
 function formInvalid() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
-  inputs.forEach((input) => {
+  // inputs.forEach((input) => {
+  for (let input of inputs) {
     if (input.value === "") {
-      alert("Merci de remplir tous les champs du formulaire");
+      //   alert("Merci de remplir tous les champs du formulaire");
+      console.log("il y a au moins 1 input vide", input);
       return true;
-    }
+      // } else {
+      }
+      //  console.log("pas d'input vide")
     return false;
-  });
+  }
+  //});
 }
 
-function firstNameInvalid() {
+function firstNameInvalid(input) {
   const firstName = document.querySelector("#firstName").value;
   const regexFName =
     /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
-  if (regexFName.test(firstName) === false) {
+  if (regexFName.test(firstName) === false || input.value === "") {
     firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
     return true;
   }
-  return false;
+  return;
 }
 
 function lastNameInvalid() {
