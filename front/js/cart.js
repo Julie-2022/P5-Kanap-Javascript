@@ -269,9 +269,9 @@ async function displayProductsToPage(infos, basket) {
  */
 
 const boutonCommander = document.getElementById("order");
-/***************** Fonction principale du Formulaire ****************/
+
 function submitForm(basket, productsIdList) {
-  /************************************ */
+  // firstName
   firstName.addEventListener("input", (e) => {
     e.preventDefault();
     let firstName = document.getElementById("firstName");
@@ -287,7 +287,7 @@ function submitForm(basket, productsIdList) {
       boutonCommander.disabled = false;
     }
   });
-
+  // lastName
   lastName.addEventListener("input", (e) => {
     e.preventDefault();
     let lastName = document.getElementById("lastName");
@@ -303,12 +303,14 @@ function submitForm(basket, productsIdList) {
       boutonCommander.disabled = false;
     }
   });
-
+  // address
   address.addEventListener("input", (e) => {
     e.preventDefault();
     let address = document.getElementById("address");
     let addressErrorMsg = document.getElementById("addressErrorMsg");
-    let addressReg = new RegExp("^[0-9a-zA-Z -àâäãçéèêëìîïòôöõùûüñ,.'-]{5,60}$");  
+    let addressReg = new RegExp(
+      "^[0-9a-zA-Z -àâäãçéèêëìîïòôöõùûüñ,.'-]{5,60}$"
+    );
     if (addressReg.test(address.value) == false) {
       addressErrorMsg.innerHTML = "Veuillez renseigner une adresse valide !";
       boutonCommander.disabled = true;
@@ -317,7 +319,7 @@ function submitForm(basket, productsIdList) {
       boutonCommander.disabled = false;
     }
   });
-
+  // city
   city.addEventListener("input", (e) => {
     e.preventDefault();
     let city = document.getElementById("city");
@@ -333,7 +335,7 @@ function submitForm(basket, productsIdList) {
       boutonCommander.disabled = false;
     }
   });
-
+  //email
   email.addEventListener("input", (e) => {
     e.preventDefault();
     let email = document.getElementById("email");
@@ -370,10 +372,9 @@ function submitForm(basket, productsIdList) {
     if (productsIdList.length === 0) {
       alert(
         "Veuillez ajouter des articles à votre panier avant de remplir le formulaire.<br>Vous allez être redirigé sur la page d'Accueil..."
-    );
-    window.location.href = "index.html";
-    }
-    else if (
+      );
+      window.location.href = "index.html";
+    } else if (
       firstName.value === "" ||
       lastName.value === "" ||
       address.value === "" ||
@@ -409,8 +410,10 @@ function submitForm(basket, productsIdList) {
         })
         .catch((err) => {
           console.log("Erreur Fetch product.js", err);
-          alert("Un problème a été rencontré lors de l'envoi du formulaire.<br>La commande n'est donc pas envoyée :( <br> Si le problème persiste, n'hésitez pas à nous contacter.");
+          alert(
+            "Un problème a été rencontré lors de l'envoi du formulaire.<br>La commande n'est donc pas envoyée :( <br> Si le problème persiste, n'hésitez pas à nous contacter."
+          );
         });
-      }
+    }
   });
 }
