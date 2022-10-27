@@ -269,148 +269,161 @@ async function displayProductsToPage(infos, basket) {
  */
 
 const boutonCommander = document.getElementById("order");
+
 /***************** Fonction principale du Formulaire ****************/
 function submitForm(basket, productsIdList) {
-  /************************************ */
-  firstName.addEventListener("input", (e) => {
-    e.preventDefault();
-    let firstName = document.getElementById("firstName");
-    let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
-    let noNumbers = new RegExp(
-      "^[^.?!:;,/\\/_-]([. '-]?[a-zA-Zàâäéèêëïîôöùûüç])+[^.?!:;,/\\/_-]$"
-    );
-    if (noNumbers.test(firstName.value) == false) {
-      firstNameErrorMsg.innerHTML = "Veuillez renseigner un prénom valide !";
-      boutonCommander.disabled = true;
-    } else {
-      firstNameErrorMsg.innerHTML = "";
-      boutonCommander.disabled = false;
-    }
-  });
-
-  lastName.addEventListener("input", (e) => {
-    e.preventDefault();
-    let lastName = document.getElementById("lastName");
-    let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
-    let noNumbers = new RegExp(
-      "^[^.?!:;,/\\/_-]([. '-]?[a-zA-Zàâäéèêëïîôöùûüç])+[^.?!:;,/\\/_-]$"
-    );
-    if (noNumbers.test(lastName.value) == false) {
-      lastNameErrorMsg.innerHTML = "Veuillez renseigner un nom valide !";
-      boutonCommander.disabled = true;
-    } else {
-      lastNameErrorMsg.innerHTML = "";
-      boutonCommander.disabled = false;
-    }
-  });
-
-  address.addEventListener("input", (e) => {
-    e.preventDefault();
-    let address = document.getElementById("address");
-    let addressErrorMsg = document.getElementById("addressErrorMsg");
-    let addressReg = new RegExp("^[0-9a-zA-Z -àâäãçéèêëìîïòôöõùûüñ,.'-]{5,60}$");  
-    if (addressReg.test(address.value) == false) {
-      addressErrorMsg.innerHTML = "Veuillez renseigner une adresse valide !";
-      boutonCommander.disabled = true;
-    } else {
-      addressErrorMsg.innerHTML = "";
-      boutonCommander.disabled = false;
-    }
-  });
-
-  city.addEventListener("input", (e) => {
-    e.preventDefault();
-    let city = document.getElementById("city");
-    let cityErrorMsg = document.getElementById("cityErrorMsg");
-    let noNumbers = new RegExp(
-      "^[^.?!:;,/\\/_-]([. '-]?[a-zA-Zàâäéèêëïîôöùûüç])+[^.?!:;,/\\/_-]$"
-    );
-    if (noNumbers.test(city.value) == false) {
-      cityErrorMsg.innerHTML = "Veuillez renseigner un nom de ville valide !";
-      boutonCommander.disabled = true;
-    } else {
-      cityErrorMsg.innerHTML = "";
-      boutonCommander.disabled = false;
-    }
-  });
-
-  email.addEventListener("input", (e) => {
-    e.preventDefault();
-    let email = document.getElementById("email");
-    let emailErrorMsg = document.getElementById("emailErrorMsg");
-    let emailReg = (regexEmail =
-      /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/);
-    if (emailReg.test(email.value) == false) {
-      emailErrorMsg.innerHTML = "Veuillez renseigner un e-mail valide !";
-      boutonCommander.disabled = true;
-    } else {
-      emailErrorMsg.innerHTML = "";
-      boutonCommander.disabled = false;
-    }
-  });
-
-  /************************************** */
   //Ecoute du bouton Commander
   boutonCommander.addEventListener("click", (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
+    if (productsIdList.length === 0)
+      alert(
+        "Veuillez ajouter des articles à votre panier avant de remplir le formulaire."
+      );
+
+    const form = document.querySelector(".cart__order__form");
+
+    console.log(form.elements, form);
+    console.log(Object.keys(basket), "=", productsIdList);
+
+    // Validation des champs du formulaire
+    // if (
+    //   formInvalid() ||
+    //   firstNameInvalid() ||
+    //   lastNameInvalid() ||
+    //   addressInvalid() ||
+    //   cityInvalid() ||
+    //   emailInvalid()
+    // ) {
+
+     if (formInvalid() === true) {
+      alert("Merci de remplir correctement tous les champs du formulaire.");
+      return;
+    }
+    console.log("Invalid() :", formInvalid())
 
     // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
       contact: {
-        firstName: firstName.value, //: form.elements.firstName.value,
-        lastName: lastName.value, //: form.elements.lastName.value,
-        address: address.value, //: form.elements.address.value,
-        city: city.value, //: form.elements.city.value,
-        email: email.value, //: form.elements.email.value,
+        firstName: form.elements.firstName.value,
+        lastName: form.elements.lastName.value,
+        address: form.elements.address.value,
+        city: form.elements.city.value,
+        email: form.elements.email.value,
       },
       products: productsIdList, // = idProducts, = Object.keys(basket),
     };
     console.log("order :", order);
 
-    if (productsIdList.length === 0) {
-      alert(
-        "Veuillez ajouter des articles à votre panier avant de remplir le formulaire.<br>Vous allez être redirigé sur la page d'Accueil..."
-    );
-    window.location.href = "index.html";
-    }
-    else if (
-      firstName.value === "" ||
-      lastName.value === "" ||
-      address.value === "" ||
-      city.value === "" ||
-      email.value === ""
-    ) {
-      alert("Veuillez remplir le formulaire contact");
-    } else {
-      const form = document.querySelector(".cart__order__form");
-
-      console.log(form.elements, form);
-      console.log(Object.keys(basket), "=", productsIdList);
-
-      // Méthode d'envoi des données
-      const options = {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(order),
-      };
-      console.log("options à envoyer :", options);
-      // On envoie les données du contact et l'id des produits à l'API
-      fetch("http://localhost:3000/api/products/order", options)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("data", data);
-          console.log(form.elements.firstName);
-          console.log(form.elements.firstName.value);
-          // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
-          document.location.href = `confirmation.html?orderId=${data.orderId}`;
-        })
-        .catch((err) => {
-          console.log("Erreur Fetch product.js", err);
-          alert("Un problème a été rencontré lors de l'envoi du formulaire.<br>La commande n'est donc pas envoyée :( <br> Si le problème persiste, n'hésitez pas à nous contacter.");
-        });
-      }
+    // Méthode d'envoi des données
+    const options = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    };
+    console.log("options à envoyer :", options);
+    // On envoie les données du contact et l'id des produits à l'API
+    fetch("http://localhost:3000/api/products/order", options)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data", data);
+        console.log(form.elements.firstName);
+        console.log(form.elements.firstName.value);
+        // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
+        ///  document.location.href = `confirmation.html?orderId=${data.orderId}`;
+      })
+      .catch((err) => {
+        console.log("Erreur Fetch product.js", err);
+        alert("Un problème a été rencontré lors de l'envoi du formulaire.");
+      });
   });
 }
+/*********** Ici ça fonctionne sauf si l'input après celui qui est repéré comme faux est faux aussi, donc c'est synchrone !*/
+function formInvalid() {
+  const form = document.querySelector(".cart__order__form");
+  const inputs = form.querySelectorAll("input");
+  for (let input of inputs) {
+    if ((input.value === "") || firstNameInvalid() ||
+      lastNameInvalid() || addressInvalid() || cityInvalid() ||emailInvalid()) {
+      console.log("c'est invalide !!!!")
+       return true
+      }
+    }
+    console.log("c'est valide !!!!")
+    //return false
+}
+
+function firstNameInvalid(input) {
+  const firstName = document.querySelector("#firstName").value;
+  firstNameErrorMsg.textContent = "";
+  const regexFName =
+    /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
+  if (regexFName.test(firstName) === false) {
+    firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
+    return true;
+  }
+  //return false;
+}
+
+function lastNameInvalid() {
+  const lastName = document.querySelector("#lastName").value;
+  lastNameErrorMsg.textContent = "";
+  const regexLName =
+    /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
+  if (regexLName.test(lastName) === false) {
+    lastNameErrorMsg.textContent = "Veuillez renseigner un nom valide !";
+    return true;
+  }
+  //return false;
+}
+
+function addressInvalid() {
+  const address = document.querySelector("#address").value;
+  //const regexAdd = /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ,.'-]+)+/
+  addressErrorMsg.textContent = "";
+  const regexAdd = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/;
+  if (regexAdd.test(address) === false) {
+    addressErrorMsg.textContent = "Veuillez saisir une adresse valide !";
+    return true;
+  }
+  //return false;
+}
+
+function cityInvalid() {
+  const city = document.querySelector("#city").value;
+  //let regex = // /^[[:alpha:]]([-' ]?[[:alpha:]])*$/
+  cityErrorMsg.textContent = "";
+  const regexCity =
+    /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{2,}$/;
+  if (regexCity.test(city) === false) {
+    cityErrorMsg.textContent = "Veuillez saisir un nom de ville valide !";
+    return true;
+  }
+  //return false;
+}
+
+function emailInvalid() {
+  const email = document.querySelector("#email").value;
+  emailErrorMsg.textContent = "";
+  const regexEmail = /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/;
+  if (regexEmail.test(email) === false) {
+    emailErrorMsg.textContent = "Veuillez saisir une adresse email valide !";
+    return true;
+  }
+}
+
+
+
+/************** test couleur  **********/
+//(form.elements.email).style.border = "none !important";
+      // (form.elements.email).style.border = "2px solid red";
+    //  // form.elements.email.css('border-color', "2px solid #cc3333");
+    //   //form.elements.email.css('border-color', 'none !important');
+    //   input.value.style.border = "2px solid red";
+    //   setTimeout(function(form, order, email) {
+    //     //(form.elements.email).css('border-color', 'none !important')
+    //     (form.elements.email).style.border = "none !important"
+    //   }, 3000)
+    /********************** */

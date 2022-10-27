@@ -138,7 +138,7 @@ function isOrderInvalid(colorsOption, numberSelect) {
     colorsOption === "" ||
     numberSelect == null ||
     numberSelect <= 0 ||
-    numberSelect >= 100
+    numberSelect > 100
   ) {
     alert(
       "Avant d'ajouter un canapé à votre panier, veuillez sélectionner la couleur souhaitée ainsi qu'une quantité ne pouvant excéder 100."
