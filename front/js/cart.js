@@ -280,10 +280,10 @@ function submitForm(basket, productsIdList) {
       "^[^.?!:;,/\\/_-]([. '-]?[a-zA-Zàâäéèêëïîôöùûüç])+[^.?!:;,/\\/_-]$"
     );
     if (noNumbers.test(firstName.value) == false) {
-      firstNameErrorMsg.innerHTML = "Veuillez renseigner un prénom valide !";
+      firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
       boutonCommander.disabled = true;
     } else {
-      firstNameErrorMsg.innerHTML = "";
+      firstNameErrorMsg.textContent = "";
       boutonCommander.disabled = false;
     }
   });
@@ -296,10 +296,10 @@ function submitForm(basket, productsIdList) {
       "^[^.?!:;,/\\/_-]([. '-]?[a-zA-Zàâäéèêëïîôöùûüç])+[^.?!:;,/\\/_-]$"
     );
     if (noNumbers.test(lastName.value) == false) {
-      lastNameErrorMsg.innerHTML = "Veuillez renseigner un nom valide !";
+      lastNameErrorMsg.textContent = "Veuillez renseigner un nom valide !";
       boutonCommander.disabled = true;
     } else {
-      lastNameErrorMsg.innerHTML = "";
+      lastNameErrorMsg.textContent = "";
       boutonCommander.disabled = false;
     }
   });
@@ -312,10 +312,10 @@ function submitForm(basket, productsIdList) {
       "^[0-9a-zA-Z -àâäãçéèêëìîïòôöõùûüñ,.'-]{5,60}$"
     );
     if (addressReg.test(address.value) == false) {
-      addressErrorMsg.innerHTML = "Veuillez renseigner une adresse valide !";
+      addressErrorMsg.textContent = "Veuillez renseigner une adresse valide !";
       boutonCommander.disabled = true;
     } else {
-      addressErrorMsg.innerHTML = "";
+      addressErrorMsg.textContent = "";
       boutonCommander.disabled = false;
     }
   });
@@ -328,10 +328,10 @@ function submitForm(basket, productsIdList) {
       "^[^.?!:;,/\\/_-]([. '-]?[a-zA-Zàâäéèêëïîôöùûüç])+[^.?!:;,/\\/_-]$"
     );
     if (noNumbers.test(city.value) == false) {
-      cityErrorMsg.innerHTML = "Veuillez renseigner un nom de ville valide !";
+      cityErrorMsg.textContent = "Veuillez renseigner un nom de ville valide !";
       boutonCommander.disabled = true;
     } else {
-      cityErrorMsg.innerHTML = "";
+      cityErrorMsg.textContent = "";
       boutonCommander.disabled = false;
     }
   });
@@ -343,10 +343,10 @@ function submitForm(basket, productsIdList) {
     let emailReg = (regexEmail =
       /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/);
     if (emailReg.test(email.value) == false) {
-      emailErrorMsg.innerHTML = "Veuillez renseigner un e-mail valide !";
+      emailErrorMsg.textContent = "Veuillez renseigner un e-mail valide !";
       boutonCommander.disabled = true;
     } else {
-      emailErrorMsg.innerHTML = "";
+      emailErrorMsg.textContent = "";
       boutonCommander.disabled = false;
     }
   });
@@ -381,7 +381,7 @@ function submitForm(basket, productsIdList) {
       city.value === "" ||
       email.value === ""
     ) {
-      alert("Veuillez remplir le formulaire contact");
+      alert("Veuillez remplir le formulaire avant de valider votre commande.");
     } else {
       const form = document.querySelector(".cart__order__form");
 
@@ -399,7 +399,7 @@ function submitForm(basket, productsIdList) {
       };
       console.log("options à envoyer :", options);
       // On envoie les données du contact et l'id des produits à l'API
-      fetch("http://localhost:3000/api/products/orde", options)
+      fetch("http://localhost:3000/api/products/order", options)
         .then((response) => response.json())
         .then((data) => {
           console.log("data", data);

@@ -1,3 +1,5 @@
+console.log("Arrivée sur la page confirmation");
+
 const orderId = getOrderId()
 displayOrderId(orderId)
 removeAllCache()
