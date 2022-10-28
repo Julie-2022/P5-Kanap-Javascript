@@ -10,7 +10,7 @@ console.log("arrivée sur la page produit");
   // complète les infos du kanap clické
   productPage(product);
 })();
-// Fct qui permet de récupérer l'id via la console par l'objet "location" puis "location.href" puis "new URL(location.href)" puis "new URL(location.href).search" puis "new URL(location.href).searchParams.get("id") => qui donne juste l'id.
+// Fonction qui permet de récupérer l'id via la console par l'objet "location" puis "location.href" puis "new URL(location.href)" puis "new URL(location.href).search" puis "new URL(location.href).searchParams.get("id") => qui donne juste l'id.
 function getProductId() {
   return new URL(location.href).searchParams.get("id");
 }
