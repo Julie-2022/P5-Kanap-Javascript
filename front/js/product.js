@@ -23,7 +23,7 @@ async function getProduct(productId) {
     console.log("productDatas :",productDatas); // vérif récup des données de l'article
     return productDatas;
   } catch (error) {
-    alert("Oups! Une erreur s'est produite, lors du chargement de la page. Vous allez être redirigé sur la page d'Accueil..."
+    alert("Oups! Une erreur s'est produite, lors du chargement de la page.<br>Vous allez être redirigé sur la page d'Accueil..."
     );
     window.location.href = "index.html";
   }

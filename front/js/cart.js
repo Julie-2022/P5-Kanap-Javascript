@@ -371,7 +371,7 @@ function submitForm(basket, productsIdList) {
 
     if (productsIdList.length === 0) {
       alert(
-        "Veuillez ajouter des articles à votre panier avant de remplir le formulaire.<br>Vous allez être redirigé sur la page d'Accueil..."
+        "Veuillez ajouter des articles à votre panier avant de remplir le formulaire. Vous allez être redirigé sur la page d'Accueil..."
       );
       window.location.href = "index.html";
     } else if (
@@ -399,7 +399,7 @@ function submitForm(basket, productsIdList) {
       };
       console.log("options à envoyer :", options);
       // On envoie les données du contact et l'id des produits à l'API
-      fetch("http://localhost:3000/api/products/order", options)
+      fetch("http://localhost:3000/api/products/orde", options)
         .then((response) => response.json())
         .then((data) => {
           console.log("data", data);
@@ -411,7 +411,7 @@ function submitForm(basket, productsIdList) {
         .catch((err) => {
           console.log("Erreur Fetch product.js", err);
           alert(
-            "Un problème a été rencontré lors de l'envoi du formulaire.<br>La commande n'est donc pas envoyée :( <br> Si le problème persiste, n'hésitez pas à nous contacter."
+            "Un problème a été rencontré lors de l'envoi du formulaire. La commande n'est donc pas envoyée. Si le problème persiste, n'hésitez pas à nous contacter."
           );
         });
     }
