@@ -126,7 +126,7 @@ function saveBasket(colorsOption, numberSelect) {
     basket[productId].push({ color: colorsOption, quantity: numberSelect });
   }
   localStorage.setItem("basket", JSON.stringify(basket));
- // console.log("basket :", basket) // vérif en désactivant redirectToCart()
+  console.log("basket :", basket) // vérif en désactivant redirectToCart()
 }
 // Rappel :
 // const colorIndex = basket[productId]?.findIndex((item) => item.color === colorsOption);

@@ -1,4 +1,5 @@
 console.log("Arrivée sur la page panier");
+//Récupération des données qui ne concernent que les produits présents dans le LocalStorage.
 async function getAllProductsInfo(productsIdList) {
   let result = [];
   for (let product of productsIdList) {
@@ -27,10 +28,10 @@ async function main() {
   // console.log("object.entries(basket)", Object.entries(basket));
   // console.log("localStorage", localStorage);
   /*============================================================*/
-
+  // Récupération des données de l'API correspondant aux id présents dans le localStorage.
   let infos = await getAllProductsInfo(productsIdList);
 
-  /*======================= données de l'API ===================*/
+  /*=========== données de l'API dans un tableau ================*/
   console.table("infos de l'API", infos);
   /*============================================================*/
 
@@ -385,9 +386,11 @@ function submitForm(basket, productsIdList) {
       alert("Veuillez remplir le formulaire avant de valider votre commande.");
     } else {
       // const form = document.querySelector(".cart__order__form");
-
-      console.log(form.elements, form);
+      // vérifications :
       console.log(Object.keys(basket), "=", productsIdList);
+      console.log(form.elements, form);
+      console.log(form.elements.firstName);
+      console.log(form.elements.firstName.value);
 
       // Méthode d'envoi des données
       const options = {
@@ -404,8 +407,6 @@ function submitForm(basket, productsIdList) {
         .then((response) => response.json())
         .then((data) => {
           console.log("data", data);
-          console.log(form.elements.firstName);
-          console.log(form.elements.firstName.value);
           // On redirige vers la page de confirmation de commande en passant l'orderId (numéro de commande) dans l'URL
           document.location.href = `confirmation.html?orderId=${data.orderId}`;
         })
