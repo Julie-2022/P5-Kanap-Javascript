@@ -128,7 +128,7 @@ function deleteProduct(basket, infos) {
       const IndexToDelete = basket[idThisArticle]?.findIndex(
         (x) => x.color === colorThisArticle
       );
-      console.log(IndexToDelete !== -1); // return true ou false si la couleur est stockée ou pas
+      console.log("IndexToDelete !== -1 :",IndexToDelete !== -1); // return true ou false si la couleur est stockée ou pas
       // On le supprime
       basket[idThisArticle].splice(IndexToDelete, 1);
       console.log("basket", basket);
@@ -269,6 +269,7 @@ async function displayProductsToPage(infos, basket) {
  */
 
 const boutonCommander = document.getElementById("order");
+const form = document.querySelector(".cart__order__form");
 
 function submitForm(basket, productsIdList) {
   // firstName
@@ -383,7 +384,7 @@ function submitForm(basket, productsIdList) {
     ) {
       alert("Veuillez remplir le formulaire avant de valider votre commande.");
     } else {
-      const form = document.querySelector(".cart__order__form");
+      // const form = document.querySelector(".cart__order__form");
 
       console.log(form.elements, form);
       console.log(Object.keys(basket), "=", productsIdList);
@@ -409,9 +410,9 @@ function submitForm(basket, productsIdList) {
           document.location.href = `confirmation.html?orderId=${data.orderId}`;
         })
         .catch((err) => {
-          console.log("Erreur Fetch product.js", err);
+          console.log("Erreur Fetch cart.js", err);
           alert(
-            "Un problème a été rencontré lors de l'envoi du formulaire. La commande n'est donc pas envoyée. Si le problème persiste, n'hésitez pas à nous contacter."
+            "Un problème a été rencontré lors de l'envoi du formulaire. La commande n'est donc pas validée. Si le problème persiste, n'hésitez pas à nous contacter."
           );
         });
     }

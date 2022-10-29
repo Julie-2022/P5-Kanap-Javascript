@@ -23,7 +23,7 @@ async function getProduct(productId) {
     console.log("productDatas :",productDatas); // vérif récup des données de l'article
     return productDatas;
   } catch (error) {
-    alert("Oups! Une erreur s'est produite, lors du chargement de la page.<br>Vous allez être redirigé sur la page d'Accueil..."
+    alert("Oups! Une erreur s'est produite, lors du chargement de la page. Vous allez être redirigé sur la page d'Accueil..."
     );
     window.location.href = "index.html";
   }
@@ -88,9 +88,9 @@ function makeColors(colors) {
 
 // button
 const button = document.querySelector("#addToCart");
-button.addEventListener("click", productClick);
+button.addEventListener("click", addBasket);
 
-function productClick() {
+function addBasket() {
   // récup des données qui peuvent être modifiées
   const colorsOption = document.querySelector("#colors").value;
   const numberSelect = document.querySelector("#quantity").value;
@@ -126,7 +126,7 @@ function saveBasket(colorsOption, numberSelect) {
     basket[productId].push({ color: colorsOption, quantity: numberSelect });
   }
   localStorage.setItem("basket", JSON.stringify(basket));
- // console.log("basket", basket) // vérif en désativant redirectToCart()
+ // console.log("basket :", basket) // vérif en désactivant redirectToCart()
 }
 // Rappel :
 // const colorIndex = basket[productId]?.findIndex((item) => item.color === colorsOption);
