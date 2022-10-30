@@ -6,7 +6,7 @@ console.log("arrivée sur la page produit");
   console.log("productId :", productId); //= vérif 1
   // fetch notre kanap
   const product = await getProduct(productId);
-  console.log("product :",product); // vérif 2 si on l'a bien récup
+  console.log("product :", product); // vérif 2 si on l'a bien récup
   // complète les infos du kanap clické
   productPage(product);
 })();
@@ -20,10 +20,11 @@ async function getProduct(productId) {
   try {
     const res = await fetch(`http://localhost:3000/api/products/${productId}`);
     const productDatas = await res.json();
-    console.log("productDatas :",productDatas); // vérif récup des données de l'article
+    console.log("productDatas :", productDatas); // vérif récup des données de l'article
     return productDatas;
   } catch (error) {
-    alert("Oups! Une erreur s'est produite, lors du chargement de la page. Vous allez être redirigé sur la page d'Accueil..."
+    alert(
+      "Oups! Une erreur s'est produite, lors du chargement de la page. Vous allez être redirigé sur la page d'Accueil..."
     );
     window.location.href = "index.html";
   }
@@ -98,8 +99,8 @@ function addBasket() {
   if (isOrderInvalid(colorsOption, numberSelect)) return;
   saveBasket(colorsOption, numberSelect);
   redirectToCart();
- // vérif en désactivant //redirectToCart() : 
- //console.log("colorsOption et numberSelect :", colorsOption, numberSelect)
+  // vérif en désactivant //redirectToCart() :
+  //console.log("colorsOption et numberSelect :", colorsOption, numberSelect)
 }
 
 /******************************** Gestion du LocalStorage **********************************/
@@ -126,7 +127,7 @@ function saveBasket(colorsOption, numberSelect) {
     basket[productId].push({ color: colorsOption, quantity: numberSelect });
   }
   localStorage.setItem("basket", JSON.stringify(basket));
-  console.log("basket :", basket) // vérif en désactivant redirectToCart()
+  console.log("basket :", basket); // vérif en désactivant redirectToCart()
 }
 // Rappel :
 // const colorIndex = basket[productId]?.findIndex((item) => item.color === colorsOption);

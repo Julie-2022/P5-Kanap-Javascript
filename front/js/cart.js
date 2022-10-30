@@ -96,7 +96,6 @@ function updateQuantity(infos, basket) {
         alert("La quantité de votre panier à été modifée");
       }
       localStorage.setItem("basket", JSON.stringify(basket));
-
       addTotalToPage(infos, basket);
       addTotalQuantity(infos, basket);
     });
@@ -129,13 +128,12 @@ function deleteProduct(basket, infos) {
       const IndexToDelete = basket[idThisArticle]?.findIndex(
         (x) => x.color === colorThisArticle
       );
-      console.log("IndexToDelete !== -1 :",IndexToDelete !== -1); // return true ou false si la couleur est stockée ou pas
+      console.log("IndexToDelete !== -1 :", IndexToDelete !== -1); // return true ou false si la couleur est stockée ou pas
       // On le supprime
       basket[idThisArticle].splice(IndexToDelete, 1);
       console.log("basket", basket);
       // On met à jour le localStorage
       localStorage.setItem("basket", JSON.stringify(basket));
-
       deleteArticleFromPage(idThisArticle, colorThisArticle);
       deleteProductEmptyFromBasket(basket, idThisArticle);
       addTotalToPage(infos, basket);
@@ -168,11 +166,9 @@ function deleteProductEmptyFromBasket(basket, idThisArticle) {
 
 function basketEmptyMessage(basket) {
   if (Object.keys(basket) === null || Object.keys(basket).length === 0) {
-    console.log("vide");
+    console.log("panier vide !");
     localStorage.clear();
-    alert(
-      "Votre panier est vide ! Vous allez être redirigé sur la page d'Accueil..."
-    );
+    alert("Votre panier est vide ! Vous allez être redirigé sur la page d'Accueil...");
     window.location.href = "index.html";
   }
 }
@@ -358,7 +354,7 @@ function submitForm(basket, productsIdList) {
   boutonCommander.addEventListener("click", (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
 
-    // On créé un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
+    // On crée un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
     const order = {
       contact: {
         firstName: firstName.value, //: form.elements.firstName.value,
@@ -372,9 +368,7 @@ function submitForm(basket, productsIdList) {
     console.log("order :", order);
 
     if (productsIdList.length === 0) {
-      alert(
-        "Veuillez ajouter des articles à votre panier avant de remplir le formulaire. Vous allez être redirigé sur la page d'Accueil..."
-      );
+      alert("Veuillez ajouter des articles à votre panier avant de remplir le formulaire. Vous allez être redirigé sur la page d'Accueil...");
       window.location.href = "index.html";
     } else if (
       firstName.value === "" ||
@@ -385,7 +379,6 @@ function submitForm(basket, productsIdList) {
     ) {
       alert("Veuillez remplir le formulaire avant de valider votre commande.");
     } else {
-      // const form = document.querySelector(".cart__order__form");
       // vérifications :
       console.log(Object.keys(basket), "=", productsIdList);
       console.log(form.elements, form);
