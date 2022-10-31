@@ -52,7 +52,7 @@ async function addTotalQuantity(infos, basket) {
     }
   }
   let totalQuantity = document.querySelector("#totalQuantity");
-  totalQuantity.innerText = totalQty;
+  totalQuantity.textContent = totalQty;
 }
 
 async function addTotalToPage(infos, basket) {
@@ -65,7 +65,7 @@ async function addTotalToPage(infos, basket) {
     }
   }
   let totalQuantity = document.querySelector("#totalPrice");
-  totalQuantity.innerText = total;
+  totalQuantity.textContent = total;
 }
 
 /************* updateQuantity *************** */
@@ -104,9 +104,7 @@ function updateQuantity(infos, basket) {
 
 function isQtyInvalid(choiceQty) {
   if (choiceQty == null || choiceQty <= 0 || choiceQty >= 100) {
-    alert(
-      "La quantité d'un article choisi doit être comprise entre 1 et 100 et être un nombre entier."
-    );
+    alert("La quantité d'un article choisi doit être comprise entre 1 et 100 et être un nombre entier.");
     return true; // pour rester sur la page = stop
   }
 }
@@ -154,10 +152,7 @@ function deleteProductEmptyFromBasket(basket, idThisArticle) {
   // Supprimer un article complètement du localStorage
   if (basket[idThisArticle] <= 1) {
     // renvoie true si il n'y a plus qu'un seul article de cet id dans le panier
-    console.log(
-      "dernier article de cet id du panier",
-      basket[idThisArticle] <= 1
-    );
+    console.log("dernier article de cet id du panier", basket[idThisArticle] <= 1);
     delete basket[idThisArticle];
     console.log("basket2", basket); // objet vide
     localStorage.setItem("basket", JSON.stringify(basket));
@@ -206,15 +201,15 @@ async function displayProductsToPage(infos, basket) {
       div2.appendChild(div3);
 
       let kanapName = document.createElement("h2");
-      kanapName.innerText = elemInfos.name;
+      kanapName.textContent = elemInfos.name;
       div3.appendChild(kanapName);
 
       let kanapColor = document.createElement("p");
-      kanapColor.innerText = color.color;
+      kanapColor.textContent = color.color;
       div3.appendChild(kanapColor);
 
       let KanapPrice = document.createElement("p");
-      KanapPrice.innerText = elemInfos.price + " €";
+      KanapPrice.textContent = elemInfos.price + " €";
       div3.appendChild(KanapPrice);
 
       let div4 = document.createElement("div");
@@ -226,7 +221,7 @@ async function displayProductsToPage(infos, basket) {
       div4.appendChild(DivQuantity);
 
       let p = document.createElement("p");
-      p.innerText = "Qté : ";
+      p.textContent = "Qté : ";
       DivQuantity.appendChild(p);
 
       let input = document.createElement("input");
@@ -355,7 +350,7 @@ function submitForm(basket, productsIdList) {
     event.preventDefault(); // Empêche le rechargement de la page
 
     // On crée un objet dans lequel on met les infos "Contact" et les infos "Produits du panier" (l'id)
-    const order = {
+    let order = {
       contact: {
         firstName: firstName.value, //: form.elements.firstName.value,
         lastName: lastName.value, //: form.elements.lastName.value,
@@ -386,7 +381,7 @@ function submitForm(basket, productsIdList) {
       console.log(form.elements.firstName.value);
 
       // Méthode d'envoi des données
-      const options = {
+      let options = {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -405,9 +400,7 @@ function submitForm(basket, productsIdList) {
         })
         .catch((err) => {
           console.log("Erreur Fetch cart.js", err);
-          alert(
-            "Un problème a été rencontré lors de l'envoi du formulaire. La commande n'est donc pas validée. Si le problème persiste, n'hésitez pas à nous contacter."
-          );
+          alert("Un problème a été rencontré lors de l'envoi du formulaire. La commande n'est donc pas validée. Si le problème persiste, n'hésitez pas à nous contacter.");
         });
     }
   });

@@ -2,10 +2,10 @@ console.log("arrivée sur la page produit");
 // Fonction auto appelée
 (async function () {
   // Récupérer l'id du kanap dans une url
-  const productId = getProductId();
+  let productId = getProductId();
   console.log("productId :", productId); //= vérif 1
   // fetch notre kanap
-  const product = await getProduct(productId);
+  let product = await getProduct(productId);
   console.log("product :", product); // vérif 2 si on l'a bien récup
   // complète les infos du kanap clické
   productPage(product);
@@ -18,28 +18,26 @@ function getProductId() {
 // Copie de getKanap + concaténation "productId"
 async function getProduct(productId) {
   try {
-    const res = await fetch(`http://localhost:3000/api/products/${productId}`);
-    const productDatas = await res.json();
+    let res = await fetch(`http://localhost:3000/api/products/${productId}`);
+    let productDatas = await res.json();
     console.log("productDatas :", productDatas); // vérif récup des données de l'article
     return productDatas;
   } catch (error) {
-    alert(
-      "Oups! Une erreur s'est produite, lors du chargement de la page. Vous allez être redirigé sur la page d'Accueil..."
-    );
+    alert("Oups! Une erreur s'est produite, lors du chargement de la page. Vous allez être redirigé sur la page d'Accueil...");
     window.location.href = "index.html";
   }
 }
 
 function productPage(product) {
   // = tout ce qui est à l'interieur du fetch
-  const altTxt = product.altTxt;
-  const colors = product.colors;
-  const description = product.description;
-  const imageUrl = product.imageUrl;
-  const name = product.name;
-  const price = product.price;
-  const _id = product._id;
-  // Plus élégant, le destructuring : const { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
+  let altTxt = product.altTxt;
+  let colors = product.colors;
+  let description = product.description;
+  let imageUrl = product.imageUrl;
+  let name = product.name;
+  let price = product.price;
+  let _id = product._id;
+  // Plus élégant, le destructuring : let { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
   //
 
   makePageTitle(name);
@@ -51,50 +49,50 @@ function productPage(product) {
 }
 
 function makePageTitle(name) {
-  const pageTitle = document.querySelector("head title");
-  pageTitle.innerText = name;
+  let pageTitle = document.querySelector("head title");
+  pageTitle.textContent = name;
 }
 
 function makeImage(imageUrl, altTxt) {
-  const image = document.createElement("img");
+  let image = document.createElement("img");
   image.src = imageUrl;
   image.alt = altTxt;
-  const parent = document.querySelector(".item__img");
+  let parent = document.querySelector(".item__img");
   parent.appendChild(image);
 }
 
 function makeTitle(name) {
-  const h1 = document.querySelector("#title");
-  h1.innerText = name;
+  let h1 = document.querySelector("#title");
+  h1.textContent = name;
 }
 
 function makePrice(price) {
-  const span = document.querySelector("#price");
-  span.innerText = price;
+  let span = document.querySelector("#price");
+  span.textContent = price;
 }
 function makeDescription(description) {
-  const p = document.querySelector("#description");
-  p.innerText = description;
+  let p = document.querySelector("#description");
+  p.textContent = description;
 }
 function makeColors(colors) {
-  const select = document.querySelector("#colors");
+  let select = document.querySelector("#colors");
 
   colors.forEach((color) => {
-    const option = document.createElement("option");
+    let option = document.createElement("option");
     option.value = color;
-    option.innerText = color;
+    option.textContent = color;
     select.appendChild(option);
   });
 }
 
 // button
-const button = document.querySelector("#addToCart");
+let button = document.querySelector("#addToCart");
 button.addEventListener("click", addBasket);
 
 function addBasket() {
   // récup des données qui peuvent être modifiées
-  const colorsOption = document.querySelector("#colors").value;
-  const numberSelect = document.querySelector("#quantity").value;
+  let colorsOption = document.querySelector("#colors").value;
+  let numberSelect = document.querySelector("#quantity").value;
   //si un des 2 est vide stop(:return), sinon saveOrder + redirectToCart
   if (isOrderInvalid(colorsOption, numberSelect)) return;
   saveBasket(colorsOption, numberSelect);
@@ -105,9 +103,9 @@ function addBasket() {
 
 /******************************** Gestion du LocalStorage **********************************/
 function saveBasket(colorsOption, numberSelect) {
-  const productId = getProductId();
+  let productId = getProductId();
   let basket = JSON.parse(localStorage.getItem("basket")) || {};
-  const colorIndex = basket[productId]?.findIndex(
+  let colorIndex = basket[productId]?.findIndex(
     (item) => item.color === colorsOption
   );
   console.log(colorIndex !== -1); // return true ou false si la couleur est stockée ou pas
@@ -130,7 +128,7 @@ function saveBasket(colorsOption, numberSelect) {
   console.log("basket :", basket); // vérif en désactivant redirectToCart()
 }
 // Rappel :
-// const colorIndex = basket[productId]?.findIndex((item) => item.color === colorsOption);
+// let colorIndex = basket[productId]?.findIndex((item) => item.color === colorsOption);
 // if (colorIndex != -1) {...}
 
 function isOrderInvalid(colorsOption, numberSelect) {
@@ -141,9 +139,7 @@ function isOrderInvalid(colorsOption, numberSelect) {
     numberSelect <= 0 ||
     numberSelect > 100
   ) {
-    alert(
-      "Avant d'ajouter un canapé à votre panier, veuillez sélectionner la couleur souhaitée ainsi qu'une quantité ne pouvant excéder 100."
-    );
+    alert("Avant d'ajouter un canapé à votre panier, veuillez sélectionner la couleur souhaitée ainsi qu'une quantité ne pouvant excéder 100.");
     return true; // pour rester sur la page = stop
   }
 }
