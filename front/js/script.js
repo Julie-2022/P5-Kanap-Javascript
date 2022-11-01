@@ -8,14 +8,14 @@ let products = [];
 let getKanaps = async () => {
   await fetch("http://localhost:3000/api/products")
     // Traiter la réponse en .json
-    .then((res) => res.json())
+    .then(res => res.json())
     // Traiter la promesse, les kanap
-    .then((kanapList) => {
+    .then(kanapList => {
       // remplir le tableau avec la promesse
       products = kanapList;
-      console.log(products);
+      ///console.log(products);
     })
-    .catch((error) => displayError());
+    .catch(error => displayError());
 };
 
 // On attend getKanaps pour afficher kanapsDisplay
@@ -57,12 +57,11 @@ kanapsDisplay();
 // Message d'erreur en cas d'échec de la requête fetch qui récupère les données de tous les Kanaps.
 function displayError() {
   let articleError = document.createElement("article");
-  articleError.innerHTML =
-    "Il n'y a aucun article disponible à ce jour.<br>Merci de réessayer ultérieurement.<br>Si ce problème persiste, n'hésitez pas à nous contacter.";
+  articleError.innerHTML = "Il n'y a aucun article disponible à ce jour.<br>Merci de réessayer ultérieurement.<br>Si ce problème persiste, n'hésitez pas à nous contacter.";
   articleError.style.paddingBottom = "25px";
   articleError.style.textAlign = "center";
   articleError.style.lineHeight = "200%";
-  let Parent = document.getElementById("items");
-  Parent.appendChild(articleError);
+  let parent = document.getElementById("items");
+  parent.appendChild(articleError);
 }
 

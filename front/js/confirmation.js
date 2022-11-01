@@ -1,4 +1,4 @@
-console.log("Arrivée sur la page confirmation");
+///console.log("Arrivée sur la page confirmation");
 let orderId = getOrderId();
 displayOrderId(orderId);
 removeBasket();
@@ -9,7 +9,7 @@ function getOrderId() {
   let urlParams = new URLSearchParams(queryString);
   return urlParams.get("orderId");
 }
-console.log("orderId :", orderId);
+///console.log("orderId :", orderId);
 
 // On l'affiche là où il faut
 function displayOrderId(orderId) {

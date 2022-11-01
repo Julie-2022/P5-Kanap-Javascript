@@ -1,12 +1,12 @@
-console.log("arrivée sur la page produit");
+///console.log("arrivée sur la page produit");
 // Fonction auto appelée
 (async function () {
   // Récupérer l'id du kanap dans une url
   let productId = getProductId();
-  console.log("productId :", productId); //= vérif 1
+  ///console.log("productId :", productId); //= vérif 1
   // fetch notre kanap
   let product = await getProduct(productId);
-  console.log("product :", product); // vérif 2 si on l'a bien récup
+  ///console.log("product :", product); // vérif 2 si on l'a bien récup
   // complète les infos du kanap clické
   productPage(product);
 })();
@@ -20,7 +20,7 @@ async function getProduct(productId) {
   try {
     let res = await fetch(`http://localhost:3000/api/products/${productId}`);
     let productDatas = await res.json();
-    console.log("productDatas :", productDatas); // vérif récup des données de l'article
+    ///console.log("productDatas :", productDatas); // vérif récup des données de l'article
     return productDatas;
   } catch (error) {
     alert("Oups! Une erreur s'est produite, lors du chargement de la page. Vous allez être redirigé sur la page d'Accueil...");
@@ -38,7 +38,6 @@ function productPage(product) {
   let price = product.price;
   let _id = product._id;
   // Plus élégant, le destructuring : let { altTxt, colors, description, imageUrl, name, price } = kanap  // + _id pas nécessaire
-  //
 
   makePageTitle(name);
   makeImage(imageUrl, altTxt);
@@ -77,7 +76,7 @@ function makeDescription(description) {
 function makeColors(colors) {
   let select = document.querySelector("#colors");
 
-  colors.forEach((color) => {
+  colors.forEach(color => {
     let option = document.createElement("option");
     option.value = color;
     option.textContent = color;
@@ -112,7 +111,7 @@ function saveBasket(colorsOption, numberSelect) {
   if (basket[productId]) {
     if (colorIndex !== -1) {
       //si la couleur est présente
-      // === colorOption // != -1 : (-1) : couleur non stockée
+      // (== -1) : couleur non stockée
       basket[productId][colorIndex].quantity =
         parseInt(basket[productId][colorIndex].quantity) +
         parseInt(numberSelect);
